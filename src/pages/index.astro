@@ -1,0 +1,462 @@
+---
+import Base from "../layouts/Base.astro";
+
+const hero = {
+  artists: {
+    prefix: "Unique ",
+    tag: "tech",
+    mid: " for ",
+    audience: "independent artists",
+    italicPre: " only ",
+    contrast: "big labels",
+    italicPost: " could afford.",
+    body: "I equip independent artists with custom-built digital experiences, to help them stand out in a crowded market. Big labels pay $20K+ for this — I make it happen at a fraction.",
+  },
+  brands: {
+    prefix: "Unique ",
+    tag: "tech",
+    mid: " for ",
+    audience: "emerging brands",
+    italicPre: " only the ",
+    contrast: "big names",
+    italicPost: " could afford.",
+    body: "I equip emerging brands with custom-built digital experiences, to help them stand out in a crowded market. Big names pay $20K+ for this — I make it happen at a fraction.",
+  },
+  creators: {
+    prefix: "Unique ",
+    tag: "tech",
+    mid: " for ",
+    audience: "solo creators",
+    italicPre: " only ",
+    contrast: "funded studios",
+    italicPost: " could afford.",
+    body: "I equip solo creators with custom-built digital experiences, to help them stand out in a crowded market. Funded studios pay $20K+ for this — I make it happen at a fraction.",
+  },
+} as const;
+
+const examples = {
+  artists: [
+    {
+      title: "Open studio",
+      desc: "A digital space where fans follow your creative process — not just the finished work.",
+      tag: "Open studio",
+      sku: "OS·001",
+    },
+    {
+      title: "Release experience",
+      desc: "A custom listening room or release experience that feels like your world.",
+      tag: "Release experience",
+      sku: "RX·002",
+    },
+    {
+      title: "Participatory tool",
+      desc: "A collaborative canvas where your audience creates within rules you define.",
+      tag: "Participatory tool",
+      sku: "PT·003",
+    },
+  ],
+  brands: [
+    {
+      title: "Drop experience",
+      desc: "A custom drop experience for artist collabs that actually matches your brand quality.",
+      tag: "Drop experience",
+      sku: "DR·001",
+    },
+    {
+      title: "Collection archive",
+      desc: "A living archive that turns every collaboration into a persistent chapter.",
+      tag: "Collection archive",
+      sku: "CA·002",
+    },
+    {
+      title: "Artist platform",
+      desc: "A roster platform where your artists accumulate profiles, releases, and press over time.",
+      tag: "Artist platform",
+      sku: "AP·003",
+    },
+  ],
+  creators: [
+    {
+      title: "Community space",
+      desc: "A private community space designed around how you actually connect with your people.",
+      tag: "Community space",
+      sku: "CS·001",
+    },
+    {
+      title: "Creator platform",
+      desc: "A custom platform that replaces the Patreon / Discord / Substack combo with something that's yours.",
+      tag: "Creator platform",
+      sku: "CP·002",
+    },
+    {
+      title: "Audience tool",
+      desc: "An audience tool built around your content philosophy.",
+      tag: "Audience tool",
+      sku: "AT·003",
+    },
+  ],
+} as const;
+
+// Only four projects shown on the right of the about paragraph.
+const projects = [
+  {
+    logo: "BB",
+    title: "Batchbrew",
+    summary: "Creative workspace with AI integrations",
+    body: "Complex product with semantic search, real-time sync, and collaborative whiteboards. Built solo — competitors need 4-person teams for the same thing.",
+  },
+  {
+    logo: "YC",
+    title: "YC-backed startup",
+    summary: "Prototyping a new product direction",
+    body: "Prototyped a new product direction for an early-stage company in the Y Combinator network. Rapid iteration from concept to testable prototype.",
+  },
+  {
+    logo: "10K",
+    title: "Seed-stage product",
+    summary: "Scaled to 10,000 users",
+    body: "Joined a funded team and helped build the product from early traction to its first 10,000 users. Core features, architecture decisions, UX direction.",
+  },
+  {
+    logo: "EXT",
+    title: "Chrome extension",
+    summary: "10K active users",
+    body: "Built core features for a browser extension that grew to 10,000 active users.",
+  },
+];
+
+const reviews = [
+  { name: "Name", text: "Placeholder review text. Replace with real testimonial from a past client or collaborator." },
+  { name: "Name", text: "Placeholder review text. Replace with real testimonial from a past client or collaborator." },
+  { name: "Name", text: "Placeholder review text. Replace with real testimonial from a past client or collaborator." },
+  { name: "Name", text: "Placeholder review text. Replace with real testimonial from a past client or collaborator." },
+];
+
+const howSteps = [
+  {
+    title: "You bring the taste and creative direction",
+    body: "You know your world better than anyone. You set the direction — what it should feel like, who it's for, what it needs to do. I bring the technical ability to make it real.",
+  },
+  {
+    title: "We simplify your idea down to the core",
+    body: "Most ideas start big. I use my experience to help you cut the scope to the one thing that matters — the smallest version that still stands out. No bloat, no feature creep. One thing, done well.",
+  },
+  {
+    title: "I build it — fast, under your direction",
+    body: "Software engineering, design, architecture — all in one person. The result is a small, focused digital asset that does one thing beautifully and reflects your identity. Not a big app that tries to do everything.",
+  },
+  {
+    title: "You get the codebase, the guidance, and an AI assistant",
+    body: "You own the code. I walk you through how to make edits yourself, set up an AI assistant I built to help you maintain and evolve it, and document everything. You're responsible for running it from here — but you have the tools to keep building on your own.",
+  },
+];
+
+const blueprint = {
+  name: "Blueprint",
+  tagline: "Clarity, scope, and a landing page.",
+  features: [
+    "Complexity assessment & simplification",
+    "Roadmap",
+    "Feature concepts",
+    "Dev tooling & workflow setup",
+    "Market research & audience assessment",
+    "Custom-built landing page + waitlist",
+  ],
+  diy: "1–2 weeks scattered",
+  agency: "€4–9K",
+  price: "€500",
+  duration: "3 days",
+};
+
+const build = {
+  name: "Build",
+  tagline: "Once you're happy with the blueprint, I can also build the first version for you.",
+  includesBlueprint: true,
+  features: [
+    "Solid tech foundation",
+    "First working version",
+    "Handoff + codebase ownership",
+    "AI assistant for maintenance",
+  ],
+  diy: "Months · high chance of giving up",
+  agency: "€15–30K",
+  price: "€3,500",
+  duration: "2 weeks",
+};
+---
+
+<Base>
+  <!-- ============================================================
+       BRAND — fixed top-left logo
+       ============================================================ -->
+  <a href="/" class="brand" aria-label="g10s home">
+    <span class="brand-mark" aria-hidden="true"></span>
+  </a>
+
+  <!-- ============================================================
+       TAB BAR — sticky top (desktop) / fixed bottom (mobile)
+       ============================================================ -->
+  <div class="toggle-bar">
+    <div class="toggle-group" role="tablist" aria-label="Audience">
+      <span class="toggle-pill" aria-hidden="true"></span>
+      <button type="button" class="toggle-btn active" data-tab="artists">Artists</button>
+      <button type="button" class="toggle-btn" data-tab="brands">Brands</button>
+      <button type="button" class="toggle-btn" data-tab="creators">Creators</button>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       HERO
+       ============================================================ -->
+  <section class="hero">
+    <h1 class="hero__title">
+      {hero.artists.prefix}<span class="hero__tag">{hero.artists.tag}</span>{hero.artists.mid}<br><span
+        class="hero__audience"
+        data-title-part="audience"
+        data-artists={hero.artists.audience}
+        data-brands={hero.brands.audience}
+        data-creators={hero.creators.audience}
+      >{hero.artists.audience}</span><br><em>only <span
+          data-title-part="article"
+          data-artists=""
+          data-brands="the "
+          data-creators=""
+        ></span><s
+          data-title-part="contrast"
+          data-artists={hero.artists.contrast}
+          data-brands={hero.brands.contrast}
+          data-creators={hero.creators.contrast}
+        >{hero.artists.contrast}</s>{hero.artists.italicPost}</em>
+    </h1>
+    <p class="hero__body">
+      <span data-content="artists">{hero.artists.body}</span>
+      <span data-content="brands" style="display:none">{hero.brands.body}</span>
+      <span data-content="creators" style="display:none">{hero.creators.body}</span>
+    </p>
+    <div>
+      <a href="#contact" class="cta-btn">Tell me what you're dreaming of</a>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       EXAMPLES — packaging-label cards
+       ============================================================ -->
+  <section class="section examples-section reveal">
+    <h2 class="section-heading">Imagine what you could create</h2>
+
+    {(["artists", "brands", "creators"] as const).map((key) => (
+      <div class="package-grid" data-content={key} style={key === "artists" ? "" : "display:none"}>
+        {examples[key].map((ex, i) => (
+          <article class="package">
+            <div class="package__visual package__visual--flower">
+              {i === 0 ? (
+                <div class="package__tulip-wrap">
+                  <img class="package__tulip-img package__tulip-img--mesh" src="/tulip.webp" alt="" aria-hidden="true" />
+                  <img class="package__tulip-img package__tulip-img--colored" src="/tulip-colored.webp" alt="" aria-hidden="true" />
+                </div>
+              ) : i === 1 ? (
+                <div class="package__tulip-wrap package__tulip-wrap--dahlia">
+                  <img class="package__tulip-img package__tulip-img--mesh" src="/dhalia.webp" alt="" aria-hidden="true" />
+                  <img class="package__tulip-img package__tulip-img--colored" src="/dhalia-colored.webp" alt="" aria-hidden="true" />
+                </div>
+              ) : (
+                <div class="package__tulip-wrap package__tulip-wrap--flip package__tulip-wrap--lily">
+                  <img class="package__tulip-img package__tulip-img--mesh" src="/lily.webp" alt="" aria-hidden="true" />
+                  <img class="package__tulip-img package__tulip-img--colored" src="/lily-colored.webp" alt="" aria-hidden="true" />
+                </div>
+              )}
+              <span class="package__visual-meta">IMG·{String(i + 1).padStart(2, "0")}</span>
+            </div>
+            <div class="package__body">
+              <div class="package__rows">
+                <div class="package__row package__row--title">
+                  <span class="package__row-key">Item</span>
+                  <span class="package__row-val">{ex.title}</span>
+                </div>
+                <div class="package__row">
+                  <span class="package__row-key">Spec</span>
+                  <span class="package__row-val">{ex.desc}</span>
+                </div>
+              </div>
+              <div class="package__foot">
+                <div class="package__sku">{ex.sku}</div>
+                <div class="package__barcode" aria-hidden="true"></div>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    ))}
+
+    <div class="examples-cta">
+      <a href="#contact" class="cta-btn">I have an idea</a>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       ABOUT — with projects on the right
+       ============================================================ -->
+  <section class="section about-section reveal">
+    <div class="about-grid">
+      <div class="about-content">
+        <div class="about-identity">
+          <div class="about-photo" role="img" aria-label="Giorgio"></div>
+          <h2>I'm Giorgio</h2>
+        </div>
+        <p>
+          Software engineer, product designer, and builder. I've built 6 products
+          from scratch, worked with 4 startup teams from early stage to thousands
+          of users, and spent the last year studying what makes brands and
+          creative culture feel alive. I work solo, move fast, and care deeply
+          about how things feel — not just how they function.
+        </p>
+      </div>
+
+      <div class="about-projects">
+        <div class="projects-label">Selected projects</div>
+        <div class="project-stack">
+          {projects.map((p) => (
+            <div class="project-card">
+              <button type="button" class="project-card__header" data-project-toggle>
+                <div class="project-card__logo">{p.logo}</div>
+                <div class="project-card__info">
+                  <h3>{p.title}</h3>
+                  <span>{p.summary}</span>
+                </div>
+                <span class="project-card__icon" aria-hidden="true">+</span>
+              </button>
+              <div class="project-card__body">
+                <div class="project-card__body-inner">
+                  <p>{p.body}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       REVIEWS — large centered title, cards
+       ============================================================ -->
+  <section class="section reviews-section reveal">
+    <h2 class="reviews-heading">What people say</h2>
+    <div class="reviews-grid">
+      {reviews.map((r) => (
+        <div class="review-card">
+          <div class="review-card__top">
+            <div class="review-card__photo" aria-hidden="true"></div>
+            <div>
+              <div class="review-card__name">{r.name}</div>
+              <div class="review-card__stars">★★★★★</div>
+            </div>
+          </div>
+          <p class="review-card__text">“{r.text}”</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- ============================================================
+       HOW WE WORK — alternating sides with connecting line
+       ============================================================ -->
+  <section class="section how-section reveal">
+    <h2 class="how-heading">How we work together</h2>
+    <div class="how-steps">
+      {howSteps.map((step, i) => (
+        <article class={`step ${i % 2 === 0 ? "step--right" : "step--left"}`}>
+          <div class="step__num">{i + 1}</div>
+          <div class="step__content">
+            <h3>{step.title}</h3>
+            <p>{step.body}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <!-- ============================================================
+       PACKAGES — pricing cards
+       ============================================================ -->
+  <section class="section packages-section reveal">
+    <div class="section-label">Packages</div>
+    <p class="packages-intro">
+      Two packages. One gets you clarity and a landing page. The other gets you a
+      working product you can build on.
+    </p>
+
+    <div class="pricing-grid">
+      <div class="pricing-card pricing-card--featured">
+        <header class="pricing-card__head">
+          <h3>{blueprint.name}</h3>
+          <p>{blueprint.tagline}</p>
+        </header>
+        <ul class="pricing-card__features">
+          {blueprint.features.map((f) => <li>{f}</li>)}
+        </ul>
+        <div class="pricing-totals">
+          <div class="pricing-total">
+            <div class="pricing-total__label">DIY</div>
+            <div class="pricing-total__value pricing-total__value--time">{blueprint.diy}</div>
+          </div>
+          <div class="pricing-total">
+            <div class="pricing-total__label">Agency</div>
+            <div class="pricing-total__value pricing-total__value--strike">{blueprint.agency}</div>
+          </div>
+          <div class="pricing-total pricing-total--ours">
+            <div class="pricing-total__label">g10s</div>
+            <div class="pricing-total__value">{blueprint.price}</div>
+            <div class="pricing-total__sub">{blueprint.duration}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pricing-card">
+        <header class="pricing-card__head">
+          <h3>{build.name}</h3>
+          <p>{build.tagline}</p>
+        </header>
+        <p class="pricing-card__includes">Everything in Blueprint, plus:</p>
+        <ul class="pricing-card__features">
+          {build.features.map((f) => <li>{f}</li>)}
+        </ul>
+        <div class="pricing-totals">
+          <div class="pricing-total">
+            <div class="pricing-total__label">DIY</div>
+            <div class="pricing-total__value pricing-total__value--time">{build.diy}</div>
+          </div>
+          <div class="pricing-total">
+            <div class="pricing-total__label">Agency</div>
+            <div class="pricing-total__value pricing-total__value--strike">{build.agency}</div>
+          </div>
+          <div class="pricing-total pricing-total--ours">
+            <div class="pricing-total__label">g10s</div>
+            <div class="pricing-total__value">{build.price}</div>
+            <div class="pricing-total__sub">{build.duration}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       FINAL CTA
+       ============================================================ -->
+  <section class="final-cta reveal" id="contact">
+    <h2>If you've been imagining something you can't build alone — let's talk.</h2>
+    <p>
+      No pitch deck needed. Just tell me what you're dreaming of and we'll figure
+      out if I can help make it real.
+    </p>
+    <a href="mailto:hello@g10s.co" class="cta-btn">hello@g10s.co</a>
+  </section>
+
+  <!-- ============================================================
+       FOOTER
+       ============================================================ -->
+  <footer class="foot">
+    <span>g10s</span>
+    <span>Lisbon — Berlin</span>
+  </footer>
+</Base>

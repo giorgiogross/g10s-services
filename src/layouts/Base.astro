@@ -1,0 +1,208 @@
+---
+import "../styles/global.css";
+import LiquidGlassFilters from "../components/LiquidGlassFilters.astro";
+import { RenaissanceGrid } from "../components/RenaissanceGrid";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "g10s — build the thing you can't build alone",
+  description = "Partner for artists, independent brands, and creators to build custom digital experiences, tools, and platforms — and hand you the keys so you own them completely.",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="color-scheme" content="light" />
+    <script is:inline>
+      document.documentElement.classList.add("js");
+    </script>
+    <title>{title}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Bitcount+Prop+Single:wght@100..900&family=Hanken+Grotesk:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Literata:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Monofett&display=swap"
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <LiquidGlassFilters />
+    <RenaissanceGrid client:load />
+<div class="page-content">
+      <slot />
+    </div>
+
+    <script>
+      const TABS = ["artists", "brands", "creators"] as const;
+      type TabId = (typeof TABS)[number];
+
+      const toggleBtns = document.querySelectorAll<HTMLButtonElement>(".toggle-btn");
+      const togglePill = document.querySelector<HTMLElement>(".toggle-pill");
+
+      let currentTab: TabId = "artists";
+      // Incremented on every new transition; RAF callbacks compare against this
+      // to self-cancel if a newer transition has already started.
+      let animGen = 0;
+
+      function isValidTab(value: string): value is TabId {
+        return (TABS as readonly string[]).includes(value);
+      }
+
+      function positionPill(activeBtn: HTMLElement, immediate = false) {
+        if (!togglePill) return;
+        const group = activeBtn.parentElement;
+        if (!group) return;
+        const padLeft = parseFloat(getComputedStyle(group).paddingLeft) || 0;
+        const x = activeBtn.offsetLeft - padLeft;
+        const w = activeBtn.offsetWidth;
+        if (immediate) {
+          togglePill.style.transition = "none";
+          togglePill.style.transform = `translateX(${x}px)`;
+          togglePill.style.width = `${w}px`;
+          requestAnimationFrame(() => {
+            togglePill.style.transition = "";
+          });
+        } else {
+          togglePill.style.transform = `translateX(${x}px)`;
+          togglePill.style.width = `${w}px`;
+        }
+      }
+
+      // ── Scramble animation (title changing parts only) ──────────────────────
+      // Sweeps a single underscore left-to-right over 900 ms, revealing the new
+      // text behind it. A generation counter lets any in-flight animation be
+      // instantly superseded when the user clicks a new tab mid-transition.
+
+      const SCRAMBLE_MS = 900;
+      const SCRAMBLE_WIN = 1;
+
+      function startScramble(
+        el: HTMLElement,
+        from: string,
+        to: string,
+        gen: number,
+      ): void {
+        const maxLen = Math.max(from.length, to.length);
+        if (maxLen === 0) { el.textContent = to; return; }
+        const t0 = performance.now();
+
+        function frame(now: number): void {
+          if (animGen !== gen) return; // superseded — stop silently
+          const t = Math.min((now - t0) / SCRAMBLE_MS, 1);
+          const sweep = t * (maxLen + SCRAMBLE_WIN);
+          let out = "";
+          for (let i = 0; i < maxLen; i++) {
+            if (i <= sweep - SCRAMBLE_WIN) {
+              out += i < to.length ? to[i] : "";
+            } else if (i <= sweep) {
+              out += "_";
+            } else {
+              out += i < from.length ? from[i] : "";
+            }
+          }
+          el.textContent = out;
+          if (t < 1) requestAnimationFrame(frame);
+        }
+
+        requestAnimationFrame(frame);
+      }
+
+      async function animateTransition(to: TabId): Promise<void> {
+        const gen = ++animGen; // invalidates any running animation
+        const parts = document.querySelectorAll<HTMLElement>("[data-title-part]");
+        // Read current textContent as "from" — may be mid-animation from a
+        // previous transition, giving a smooth hand-off.
+        parts.forEach((el) => {
+          startScramble(el, el.textContent ?? "", el.dataset[to] ?? "", gen);
+        });
+        await new Promise<void>((r) => setTimeout(r, SCRAMBLE_MS + 50));
+        if (animGen !== gen) return; // superseded before we finished
+        parts.forEach((el) => { el.textContent = el.dataset[to] ?? ""; });
+      }
+
+      // ── Tab switching ────────────────────────────────────────────────────────
+
+      function setTab(id: TabId, immediate = false): void {
+        if (id === currentTab && !immediate) return;
+
+        // ① Pill and button state — always immediate.
+        let activeBtn: HTMLButtonElement | null = null;
+        toggleBtns.forEach((btn) => {
+          const isActive = btn.dataset.tab === id;
+          btn.classList.toggle("active", isActive);
+          if (isActive) activeBtn = btn;
+        });
+        if (activeBtn) positionPill(activeBtn, immediate);
+
+        // ② Content swap — always immediate.
+        document.querySelectorAll<HTMLElement>("[data-content]").forEach((el) => {
+          el.style.display = el.dataset.content === id ? "" : "none";
+        });
+
+        // ③ URL — always immediate.
+        if (history.replaceState) history.replaceState(null, "", `#${id}`);
+
+        currentTab = id;
+
+        // ④ Title scramble — async, never blocks ①②③.
+        if (immediate) {
+          document.querySelectorAll<HTMLElement>("[data-title-part]").forEach((el) => {
+            el.textContent = el.dataset[id] ?? el.textContent ?? "";
+          });
+        } else {
+          animateTransition(id);
+        }
+      }
+
+      toggleBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const id = btn.dataset.tab;
+          if (id && isValidTab(id)) setTab(id);
+        });
+      });
+
+      const hash = location.hash.replace("#", "");
+      const initial: TabId = isValidTab(hash) ? hash : "artists";
+      requestAnimationFrame(() => setTab(initial, true));
+
+      let pillResizeTimer: number | null = null;
+      window.addEventListener("resize", () => {
+        if (pillResizeTimer !== null) clearTimeout(pillResizeTimer);
+        pillResizeTimer = window.setTimeout(() => {
+          const active = document.querySelector<HTMLElement>(".toggle-btn.active");
+          if (active) positionPill(active, true);
+        }, 100);
+      });
+
+      document.querySelectorAll<HTMLElement>("[data-project-toggle]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const item = btn.closest(".project-item");
+          if (item) item.classList.toggle("open");
+        });
+      });
+
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              io.unobserve(entry.target);
+            }
+          }
+        },
+        { rootMargin: "-8% 0px -8% 0px", threshold: 0.05 },
+      );
+      document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+    </script>
+  </body>
+</html>
