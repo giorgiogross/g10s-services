@@ -1,0 +1,300 @@
+:root {
+  /* Positions measured on the cropped PNG (634×634) */
+  --td-device-screen-left: 17.98%;
+  --td-device-screen-top: 24.13%;
+  --td-device-screen-w: 63.41%;
+  --td-device-screen-h: 34.54%;
+  --td-device-screen-radius: 5%;
+  --td-device-play-cx: 50.16%;
+  --td-device-play-cy: 79.81%;
+  --td-device-play-d: 31.55%;
+  --td-device-heart-cx: 20.82%;
+  --td-device-heart-cy: 71.61%;
+  --td-device-heart-d: 11.04%;
+
+  /* Device-visible width divided by cropped-PNG width (559/634 = 0.8817).
+     Used to grow the stage so the PNG spills over while the device visible
+     region exactly fills --vis-max. */
+  --td-device-to-png: 0.8817;
+}
+
+.td-app {
+  position: relative;
+  height: 100vh;
+  height: 100svh;
+  width: 100vw;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: clamp(6px, 1.5vh, 16px) 0 96px;
+  box-sizing: border-box;
+  background: linear-gradient(180deg, #eef1f7 0%, #d9dfea 100%);
+  font-family: "Jersey 10", system-ui, sans-serif;
+  color: #1a1a1a;
+}
+.td-yt-frame { margin-bottom: 10px; }
+.td-song-link { margin-top: 2px; }
+
+/* ---------- YouTube pip (centered above the device) ---------- */
+.td-yt-frame {
+  width: 200px;
+  height: 200px;
+  flex: 0 0 auto;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #000;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 14px 30px rgba(0, 0, 0, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  z-index: 5;
+}
+.td-yt-frame iframe,
+.td-yt-frame > div {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+@media (max-height: 760px) {
+  .td-yt-frame { width: 140px; height: 140px; border-radius: 14px; }
+}
+@media (max-height: 600px) {
+  .td-yt-frame { width: 108px; height: 108px; border-radius: 12px; }
+}
+
+/* ---------- Device + screen ---------- */
+.td-stage {
+  position: relative;
+  /* Reserve ~420px for YT (200) + sources (26) + tab-bar area (96) + gaps +
+     padding. --vis-max is the device-visible size; stage is 1/0.8817 larger
+     so PNG spills while the device body fills --vis-max exactly. */
+  --vis-max: min(80svh, 1200px, 100vw, calc(100svh - 420px));
+  width: calc(var(--vis-max) / var(--td-device-to-png));
+  aspect-ratio: 1 / 1;
+  flex: 0 0 auto;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.td-device {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  filter: drop-shadow(0 22px 30px rgba(50, 40, 10, 0.18));
+}
+
+.td-screen {
+  position: absolute;
+  left: var(--td-device-screen-left);
+  top: var(--td-device-screen-top);
+  width: var(--td-device-screen-w);
+  height: var(--td-device-screen-h);
+  border-radius: var(--td-device-screen-radius);
+  overflow: hidden;
+  pointer-events: none;
+  background: #0a0f1c;
+}
+
+.td-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+.td-play-btn,
+.td-heart-btn {
+  position: absolute;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 50%;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.td-play-btn {
+  left: var(--td-device-play-cx);
+  top: var(--td-device-play-cy);
+  width: var(--td-device-play-d);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+}
+
+.td-heart-btn {
+  left: var(--td-device-heart-cx);
+  top: var(--td-device-heart-cy);
+  width: var(--td-device-heart-d);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+}
+
+.td-play-btn:focus-visible,
+.td-heart-btn:focus-visible {
+  outline: 3px solid #5a6fff;
+  outline-offset: 4px;
+}
+
+/* ---------- Song link (under the device) ---------- */
+.td-song-link {
+  background: transparent;
+  border: 0;
+  color: #1a1a1a;
+  opacity: 0.55;
+  font-family: "Jersey 10", monospace;
+  font-size: 22px;
+  letter-spacing: 0.04em;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 2px 10px;
+  flex: 0 0 auto;
+  z-index: 5;
+  text-align: center;
+  max-width: 90vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.td-song-link:hover {
+  opacity: 1;
+}
+.td-song-link:focus-visible {
+  outline: 2px solid #5a6fff;
+  outline-offset: 2px;
+}
+
+/* ---------- Floating liquid-glass tab bar ---------- */
+.td-tabbar {
+  position: fixed;
+  bottom: max(16px, calc(env(safe-area-inset-bottom, 0px) + 16px));
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 4px;
+  padding: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.1),
+    0 16px 40px rgba(0, 0, 0, 0.18);
+  z-index: 20;
+}
+.td-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: transparent;
+  border: 0;
+  color: #1a1a1a;
+  cursor: pointer;
+  font-family: "Jersey 10", monospace;
+  font-size: 20px;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  transition: background 0.18s ease;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+}
+.td-tab:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+.td-tab[aria-selected="true"] {
+  background: rgba(255, 255, 255, 0.65);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+.td-tab:focus-visible {
+  outline: 2px solid #5a6fff;
+  outline-offset: 2px;
+}
+.td-tab-icon {
+  font-size: 14px;
+  opacity: 0.85;
+  line-height: 1;
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .td-tabbar {
+    background: rgba(255, 255, 255, 0.88);
+  }
+}
+
+/* ---------- Sources drawer ---------- */
+.td-sources-panel {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transform: translateY(100%);
+  transition: transform 0.32s cubic-bezier(0.33, 1, 0.68, 1);
+  background: rgba(245, 247, 252, 0.88);
+  backdrop-filter: blur(30px) saturate(160%);
+  -webkit-backdrop-filter: blur(30px) saturate(160%);
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.14);
+  padding: 20px 24px calc(100px + env(safe-area-inset-bottom, 0px));
+  z-index: 18;
+  max-height: 60svh;
+  overflow: auto;
+  color: #1a1a1a;
+}
+.td-sources-panel--open {
+  transform: translateY(0);
+}
+.td-sources-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.td-sources-header h2 {
+  margin: 0;
+  font-family: "Jersey 10", monospace;
+  font-size: 32px;
+  letter-spacing: 0.04em;
+  font-weight: 400;
+}
+.td-sources-close {
+  background: transparent;
+  border: 0;
+  font-size: 32px;
+  line-height: 1;
+  cursor: pointer;
+  color: #1a1a1a;
+  padding: 4px 10px;
+  border-radius: 8px;
+}
+.td-sources-close:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+.td-sources-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-family: "Jersey 10", monospace;
+  font-size: 22px;
+  letter-spacing: 0.02em;
+}
+.td-sources-list li {
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+.td-sources-list li:last-child {
+  border-bottom: 0;
+}
