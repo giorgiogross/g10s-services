@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import type { PointerEvent as ReactPointerEvent, ReactNode } from "react";
 
 interface Props {
@@ -10,13 +11,29 @@ interface Props {
 export function Device({ children, onPlayDown, onPlayUp, onHeartDown }: Props) {
   const handlePlayDown = (e: ReactPointerEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    e.currentTarget.setPointerCapture?.(e.pointerId);
     onPlayDown();
+  };
+  const handlePlayUp = (e: ReactPointerEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    onPlayUp();
   };
   const handleHeartDown = (e: ReactPointerEvent<HTMLButtonElement>) => {
     e.preventDefault();
     onHeartDown();
   };
+
+  // Safety net for iOS Safari: if any pointer is released anywhere on the
+  // document while play is being held (finger dragged off the button, then
+  // lifted) ensure we clear the flap-hold state.
+  useEffect(() => {
+    const onWinPointerUp = () => onPlayUp();
+    window.addEventListener("pointerup", onWinPointerUp);
+    window.addEventListener("pointercancel", onWinPointerUp);
+    return () => {
+      window.removeEventListener("pointerup", onWinPointerUp);
+      window.removeEventListener("pointercancel", onWinPointerUp);
+    };
+  }, [onPlayUp]);
 
   return (
     <section className="td-stage" aria-label="Heart monitor device">
@@ -32,8 +49,8 @@ export function Device({ children, onPlayDown, onPlayUp, onHeartDown }: Props) {
         className="td-play-btn"
         aria-label="Flap / Play"
         onPointerDown={handlePlayDown}
-        onPointerUp={onPlayUp}
-        onPointerCancel={onPlayUp}
+        onPointerUp={handlePlayUp}
+        onPointerCancel={handlePlayUp}
       />
       <button
         type="button"

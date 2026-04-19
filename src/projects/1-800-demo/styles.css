@@ -111,6 +111,7 @@
   image-rendering: pixelated;
   image-rendering: -moz-crisp-edges;
   image-rendering: crisp-edges;
+  pointer-events: none;
 }
 
 .td-play-btn,
@@ -121,8 +122,10 @@
   padding: 0;
   cursor: pointer;
   border-radius: 50%;
-  touch-action: none;
+  touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
+  /* Sit above the device PNG and screen overlay so touches always land here */
+  z-index: 3;
 }
 
 .td-play-btn {
