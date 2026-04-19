@@ -20,8 +20,11 @@ interface YTPlayer {
   playVideo?: () => void;
   pauseVideo?: () => void;
   stopVideo?: () => void;
+  mute?: () => void;
+  unMute?: () => void;
   seekTo?: (seconds: number, allowSeekAhead: boolean) => void;
   destroy?: () => void;
+  getPlayerState?: () => number;
 }
 
 export interface YouTubeApi {
@@ -29,6 +32,8 @@ export interface YouTubeApi {
   pause: () => void;
   restart: () => void;
 }
+
+const TAG = "[yt]";
 
 export function useYouTubePlayer(
   elementId: string,
@@ -38,24 +43,32 @@ export function useYouTubePlayer(
   const readyRef = useRef(false);
   const queuedRef = useRef<Array<() => void>>([]);
 
-  // Stable API — closures read refs at call time, so they're always current.
   const apiRef = useRef<YouTubeApi | null>(null);
   if (!apiRef.current) {
-    const runOrQueue = (fn: () => void) => {
-      if (playerRef.current && readyRef.current) fn();
-      else queuedRef.current.push(fn);
+    const runOrQueue = (name: string, fn: () => void) => {
+      const p = playerRef.current;
+      const r = readyRef.current;
+      console.log(TAG, name, "called", { hasPlayer: !!p, ready: r });
+      if (p && r) {
+        fn();
+      } else {
+        queuedRef.current.push(fn);
+      }
     };
     apiRef.current = {
       play: () =>
-        runOrQueue(() => {
+        runOrQueue("play", () => {
+          console.log(TAG, "-> playVideo()");
           playerRef.current?.playVideo?.();
         }),
       pause: () =>
-        runOrQueue(() => {
+        runOrQueue("pause", () => {
+          console.log(TAG, "-> pauseVideo()");
           playerRef.current?.pauseVideo?.();
         }),
       restart: () =>
-        runOrQueue(() => {
+        runOrQueue("restart", () => {
+          console.log(TAG, "-> seekTo(0) + playVideo()");
           playerRef.current?.seekTo?.(0, true);
           playerRef.current?.playVideo?.();
         }),
@@ -69,7 +82,11 @@ export function useYouTubePlayer(
     const createPlayer = () => {
       if (disposed || !window.YT?.Player) return;
       const el = document.getElementById(elementId);
-      if (!el) return;
+      if (!el) {
+        console.log(TAG, "element missing:", elementId);
+        return;
+      }
+      console.log(TAG, "creating YT.Player", { elementId, videoId });
       playerRef.current = new window.YT.Player(elementId, {
         videoId,
         playerVars: {
@@ -84,8 +101,13 @@ export function useYouTubePlayer(
           onReady: () => {
             if (disposed) return;
             readyRef.current = true;
+            console.log(TAG, "onReady fired. Flushing queue:", queuedRef.current.length);
             for (const cmd of queuedRef.current) cmd();
             queuedRef.current = [];
+          },
+          onStateChange: (e) => {
+            const state = (e as { data?: number })?.data;
+            console.log(TAG, "state change:", state, "(-1 unstarted, 0 ended, 1 playing, 2 paused, 3 buffering, 5 cued)");
           },
         },
       });
