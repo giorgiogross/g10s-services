@@ -328,7 +328,10 @@ export class FlappyEngine {
       h: size,
     };
     const groundY = PLAY_H - GROUND_H;
-    if (birdRect.y + birdRect.h > groundY || birdRect.y < 0) {
+    // Allow the heart sprite to slip by up to 50% of its height below the
+    // screen before triggering game-over. Center Y > PLAY_H means the
+    // visual bottom half of the sprite is off-screen.
+    if (this.birdY > PLAY_H || birdRect.y < 0) {
       this.hooks.onDie();
       return;
     }

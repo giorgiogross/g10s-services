@@ -24,7 +24,6 @@ interface YTPlayer {
   unMute?: () => void;
   seekTo?: (seconds: number, allowSeekAhead: boolean) => void;
   destroy?: () => void;
-  getPlayerState?: () => number;
 }
 
 export interface YouTubeApi {
@@ -32,8 +31,6 @@ export interface YouTubeApi {
   pause: () => void;
   restart: () => void;
 }
-
-const TAG = "[yt]";
 
 export function useYouTubePlayer(
   elementId: string,
@@ -45,30 +42,21 @@ export function useYouTubePlayer(
 
   const apiRef = useRef<YouTubeApi | null>(null);
   if (!apiRef.current) {
-    const runOrQueue = (name: string, fn: () => void) => {
-      const p = playerRef.current;
-      const r = readyRef.current;
-      console.log(TAG, name, "called", { hasPlayer: !!p, ready: r });
-      if (p && r) {
-        fn();
-      } else {
-        queuedRef.current.push(fn);
-      }
+    const runOrQueue = (fn: () => void) => {
+      if (playerRef.current && readyRef.current) fn();
+      else queuedRef.current.push(fn);
     };
     apiRef.current = {
       play: () =>
-        runOrQueue("play", () => {
-          console.log(TAG, "-> playVideo()");
+        runOrQueue(() => {
           playerRef.current?.playVideo?.();
         }),
       pause: () =>
-        runOrQueue("pause", () => {
-          console.log(TAG, "-> pauseVideo()");
+        runOrQueue(() => {
           playerRef.current?.pauseVideo?.();
         }),
       restart: () =>
-        runOrQueue("restart", () => {
-          console.log(TAG, "-> seekTo(0) + playVideo()");
+        runOrQueue(() => {
           playerRef.current?.seekTo?.(0, true);
           playerRef.current?.playVideo?.();
         }),
@@ -82,11 +70,7 @@ export function useYouTubePlayer(
     const createPlayer = () => {
       if (disposed || !window.YT?.Player) return;
       const el = document.getElementById(elementId);
-      if (!el) {
-        console.log(TAG, "element missing:", elementId);
-        return;
-      }
-      console.log(TAG, "creating YT.Player", { elementId, videoId });
+      if (!el) return;
       playerRef.current = new window.YT.Player(elementId, {
         videoId,
         playerVars: {
@@ -101,13 +85,8 @@ export function useYouTubePlayer(
           onReady: () => {
             if (disposed) return;
             readyRef.current = true;
-            console.log(TAG, "onReady fired. Flushing queue:", queuedRef.current.length);
             for (const cmd of queuedRef.current) cmd();
             queuedRef.current = [];
-          },
-          onStateChange: (e) => {
-            const state = (e as { data?: number })?.data;
-            console.log(TAG, "state change:", state, "(-1 unstarted, 0 ended, 1 playing, 2 paused, 3 buffering, 5 cued)");
           },
         },
       });
