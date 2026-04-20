@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Device } from "./components/Device";
 import { GameCanvas, type GameCanvasHandle } from "./components/GameCanvas";
 import { SourcesPanel } from "./components/SourcesPanel";
@@ -18,6 +18,7 @@ const SITE_URL =
 
 export default function App() {
   const gameRef = useRef<GameCanvasHandle>(null);
+  const [flapPressed, setFlapPressed] = useState(false);
   const gameState = use1800DemoStore((s) => s.gameState);
   const shareStep = use1800DemoStore((s) => s.shareStep);
   const start = use1800DemoStore((s) => s.start);
@@ -80,6 +81,7 @@ export default function App() {
   }, [setShareStep, captureAndShare, reset, yt]);
 
   const handlePlayDown = useCallback(() => {
+    setFlapPressed(true);
     if (advanceWonFlow()) {
       gameRef.current?.setFlapHold(true);
       setTab("play");
@@ -97,6 +99,7 @@ export default function App() {
   }, [advanceWonFlow, start, setTab, yt]);
 
   const handlePlayUp = useCallback(() => {
+    setFlapPressed(false);
     gameRef.current?.setFlapHold(false);
   }, []);
 
@@ -144,9 +147,13 @@ export default function App() {
 
   return (
     <>
+      <a href="/" className="td-logo-link" aria-label="g10s home">
+        <img src="/g10s_logo_pixels_bold.svg" alt="g10s" className="td-logo" />
+      </a>
       <main className="td-app">
         <YouTubeEmbed />
         <Device
+          pressed={flapPressed}
           onPlayDown={handlePlayDown}
           onPlayUp={handlePlayUp}
           onHeartDown={handleHeartDown}

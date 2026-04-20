@@ -1,10 +1,13 @@
 ---
-// Liquid glass filters — taken directly from the reference pen.
+// Liquid glass displacement filter — shared across the landing page and
+// demo projects. The refraction is driven by a pre-baked displacement
+// WebP (/liquid-map.webp) sampled via feImage and fed into
+// feDisplacementMap. primitiveUnits="objectBoundingBox" lets the same
+// map stretch cleanly across any pill size.
 //
-// `container-glass` — broad organic refraction for the toolbar.
-// `btn-glass`       — pre-baked normal map PNG, stretched via
-//                     `primitiveUnits="objectBoundingBox"` so the same
-//                     lens fits any pill/capsule size.
+// Safari / iOS note: `backdrop-filter: url(#...)` is unsupported, so
+// consuming styles must pair the url() filter with a plain
+// `-webkit-backdrop-filter: blur() saturate()` fallback.
 ---
 
 <svg
@@ -14,49 +17,21 @@
   style="position:absolute;width:0;height:0;overflow:hidden;pointer-events:none;"
 >
   <defs>
-    <filter
-      id="container-glass"
-      x="0%"
-      y="0%"
-      width="100%"
-      height="100%"
-    >
-      <feTurbulence
-        type="fractalNoise"
-        baseFrequency="0.008 0.008"
-        numOctaves="2"
-        seed="92"
-        result="noise"
-      />
-      <feGaussianBlur in="noise" stdDeviation="0.02" result="blur" />
-      <feDisplacementMap
-        in="SourceGraphic"
-        in2="blur"
-        scale="77"
-        xChannelSelector="R"
-        yChannelSelector="G"
-      />
-    </filter>
-
-    <filter id="btn-glass" primitiveUnits="objectBoundingBox">
+    <filter id="g10s-liquid-glass" primitiveUnits="objectBoundingBox">
       <feImage
-        href="/glass-normal.png"
+        href="/liquid-map.webp"
         x="0"
         y="0"
-        width="1"
-        height="1"
+        width="100%"
+        height="100%"
         result="map"
         preserveAspectRatio="none"
       />
-      <feGaussianBlur
-        in="SourceGraphic"
-        stdDeviation="0.02"
-        result="blur"
-      />
+      <feGaussianBlur in="SourceGraphic" stdDeviation="0.01" result="blur" />
       <feDisplacementMap
         in="blur"
         in2="map"
-        scale="1"
+        scale="0.4"
         xChannelSelector="R"
         yChannelSelector="G"
       />

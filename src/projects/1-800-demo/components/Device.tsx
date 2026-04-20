@@ -3,12 +3,19 @@ import type { PointerEvent as ReactPointerEvent, ReactNode } from "react";
 
 interface Props {
   children: ReactNode;
+  pressed: boolean;
   onPlayDown: () => void;
   onPlayUp: () => void;
   onHeartDown: () => void;
 }
 
-export function Device({ children, onPlayDown, onPlayUp, onHeartDown }: Props) {
+export function Device({
+  children,
+  pressed,
+  onPlayDown,
+  onPlayUp,
+  onHeartDown,
+}: Props) {
   const handlePlayDown = (e: ReactPointerEvent<HTMLButtonElement>) => {
     e.preventDefault();
     onPlayDown();
@@ -22,9 +29,8 @@ export function Device({ children, onPlayDown, onPlayUp, onHeartDown }: Props) {
     onHeartDown();
   };
 
-  // Safety net for iOS Safari: if any pointer is released anywhere on the
-  // document while play is being held (finger dragged off the button, then
-  // lifted) ensure we clear the flap-hold state.
+  // Safety net for iOS Safari: clear hold state if the pointer is released
+  // anywhere on the document.
   useEffect(() => {
     const onWinPointerUp = () => onPlayUp();
     window.addEventListener("pointerup", onWinPointerUp);
@@ -39,7 +45,17 @@ export function Device({ children, onPlayDown, onPlayUp, onHeartDown }: Props) {
     <section className="td-stage" aria-label="Heart monitor device">
       <img
         className="td-device"
-        src="/1-800-demo/1-800-device-front-cropped.png"
+        src="/1-800-demo/1-800-device-front-cropped.webp"
+        alt=""
+        draggable={false}
+      />
+      {/* Pressed button overlay. Same 634×634 frame as the default image
+          with the surrounding pixels fully transparent — so alignment is
+          automatic (same position + sizing rules). Always in the DOM so
+          the browser keeps it decoded for a zero-flicker swap. */}
+      <img
+        className={`td-device ${pressed ? "" : "td-device--hidden"}`}
+        src="/1-800-demo/1-800-device-pressed-button.webp"
         alt=""
         draggable={false}
       />

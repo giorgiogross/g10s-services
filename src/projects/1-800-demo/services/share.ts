@@ -15,7 +15,7 @@
 //   │   Listen to {song title}   │
 //   └────────────────────────────┘
 
-const DEVICE_SRC = "/1-800-demo/1-800-device-front-cropped.png";
+const DEVICE_SRC = "/1-800-demo/1-800-device-front-cropped.webp";
 
 // Screen position inside the 634×634 cropped device (see styles.css CSS vars)
 const SCREEN_LEFT = 0.1798;

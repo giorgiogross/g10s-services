@@ -1,3 +1,5 @@
+@import "../../styles/liquid-glass.css";
+
 :root {
   /* Positions measured on the cropped PNG (634×634) */
   --td-device-screen-left: 17.98%;
@@ -37,6 +39,36 @@
 }
 .td-yt-frame { margin-bottom: 10px; }
 .td-song-link { margin-top: 2px; }
+
+/* ---------- Top-left g10s logo (home link) ---------- */
+.td-logo-link {
+  position: fixed;
+  top: max(14px, env(safe-area-inset-top, 0px) + 14px);
+  left: max(14px, env(safe-area-inset-left, 0px) + 14px);
+  z-index: 22;
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 8px;
+  border-radius: 10px;
+  transition: background 0.18s ease, opacity 0.18s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.td-logo-link:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+.td-logo-link:focus-visible {
+  outline: 2px solid #5a6fff;
+  outline-offset: 2px;
+}
+.td-logo {
+  display: block;
+  height: 28px;
+  width: auto;
+  pointer-events: none;
+}
+@media (max-width: 640px) {
+  .td-logo { height: 24px; }
+}
 
 /* ---------- YouTube pip (centered above the device) ---------- */
 .td-yt-frame {
@@ -89,6 +121,9 @@
   pointer-events: none;
   user-select: none;
   -webkit-user-drag: none;
+}
+.td-device--hidden {
+  visibility: hidden;
 }
 
 .td-screen {
@@ -177,7 +212,7 @@
   outline-offset: 2px;
 }
 
-/* ---------- Floating liquid-glass tab bar ---------- */
+/* ---------- Floating tab bar (glass look from shared .liquid-glass) ---------- */
 .td-tabbar {
   position: fixed;
   bottom: max(16px, calc(env(safe-area-inset-bottom, 0px) + 16px));
@@ -187,14 +222,6 @@
   gap: 4px;
   padding: 6px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.32);
-  backdrop-filter: blur(24px) saturate(160%);
-  -webkit-backdrop-filter: blur(24px) saturate(160%);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.55),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.1),
-    0 16px 40px rgba(0, 0, 0, 0.18);
   z-index: 20;
 }
 .td-tab {
@@ -231,12 +258,6 @@
   opacity: 0.85;
   line-height: 1;
 }
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .td-tabbar {
-    background: rgba(255, 255, 255, 0.88);
-  }
-}
-
 /* ---------- Sources drawer ---------- */
 .td-sources-panel {
   position: fixed;
@@ -250,27 +271,32 @@
   -webkit-backdrop-filter: blur(30px) saturate(160%);
   border-top: 1px solid rgba(255, 255, 255, 0.5);
   box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.14);
-  padding: 20px 24px calc(100px + env(safe-area-inset-bottom, 0px));
+  padding: 24px 20px calc(110px + env(safe-area-inset-bottom, 0px));
   z-index: 18;
-  max-height: 60svh;
+  max-height: 72svh;
   overflow: auto;
   color: #1a1a1a;
 }
 .td-sources-panel--open {
   transform: translateY(0);
 }
+.td-sources-inner {
+  max-width: 800px;
+  margin: 0 auto;
+}
 .td-sources-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 }
 .td-sources-header h2 {
   margin: 0;
   font-family: "Jersey 10", monospace;
-  font-size: 32px;
+  font-size: 38px;
   letter-spacing: 0.04em;
   font-weight: 400;
+  line-height: 1;
 }
 .td-sources-close {
   background: transparent;
@@ -281,6 +307,7 @@
   color: #1a1a1a;
   padding: 4px 10px;
   border-radius: 8px;
+  font-family: inherit;
 }
 .td-sources-close:hover {
   background: rgba(0, 0, 0, 0.06);
@@ -289,9 +316,10 @@
   list-style: none;
   padding: 0;
   margin: 0;
-  font-family: "Jersey 10", monospace;
-  font-size: 22px;
-  letter-spacing: 0.02em;
+  font-family: "Hanken Grotesk", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-size: 17px;
+  line-height: 1.55;
+  color: #1a1a1a;
 }
 .td-sources-list li {
   padding: 12px 0;
@@ -299,4 +327,25 @@
 }
 .td-sources-list li:last-child {
   border-bottom: 0;
+}
+.td-sources-list a {
+  color: #1a1a1a;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.td-sources-list a:hover {
+  color: #0d3fe0;
+}
+.td-sources-label {
+  font-weight: 600;
+}
+.td-sources-disclaimer {
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(26, 26, 26, 0.7);
+  padding-top: 16px !important;
+  margin-top: 4px;
+}
+.td-sources-disclaimer strong {
+  letter-spacing: 0.04em;
 }

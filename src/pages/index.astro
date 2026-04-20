@@ -7,9 +7,9 @@ const hero = {
     tag: "tech",
     mid: " for ",
     audience: "independent artists",
-    italicPre: " only ",
-    contrast: "big labels",
-    italicPost: " could afford.",
+    italicPre: "to stick in ",
+    contrast: "listener's minds",
+    italicPost: ".",
     body: "I equip independent artists with custom-built digital experiences, to help them stand out in a crowded market. Big labels pay $20K+ for this — I make it happen at a fraction.",
   },
   brands: {
@@ -17,9 +17,9 @@ const hero = {
     tag: "tech",
     mid: " for ",
     audience: "emerging brands",
-    italicPre: " only the ",
-    contrast: "big names",
-    italicPost: " could afford.",
+    italicPre: "to earn ",
+    contrast: "trust",
+    italicPost: ".",
     body: "I equip emerging brands with custom-built digital experiences, to help them stand out in a crowded market. Big names pay $20K+ for this — I make it happen at a fraction.",
   },
   creators: {
@@ -27,9 +27,9 @@ const hero = {
     tag: "tech",
     mid: " for ",
     audience: "solo creators",
-    italicPre: " only ",
-    contrast: "funded studios",
-    italicPost: " could afford.",
+    italicPre: "to deepen ",
+    contrast: "connections",
+    italicPost: ".",
     body: "I equip solo creators with custom-built digital experiences, to help them stand out in a crowded market. Funded studios pay $20K+ for this — I make it happen at a fraction.",
   },
 } as const;
@@ -197,7 +197,7 @@ const build = {
        TAB BAR — sticky top (desktop) / fixed bottom (mobile)
        ============================================================ -->
   <div class="toggle-bar">
-    <div class="toggle-group" role="tablist" aria-label="Audience">
+    <div class="toggle-group liquid-glass" role="tablist" aria-label="Audience">
       <span class="toggle-pill" aria-hidden="true"></span>
       <button type="button" class="toggle-btn active" data-tab="artists">Artists</button>
       <button type="button" class="toggle-btn" data-tab="brands">Brands</button>
@@ -216,17 +216,17 @@ const build = {
         data-artists={hero.artists.audience}
         data-brands={hero.brands.audience}
         data-creators={hero.creators.audience}
-      >{hero.artists.audience}</span><br><em>only <span
-          data-title-part="article"
-          data-artists=""
-          data-brands="the "
-          data-creators=""
-        ></span><s
+      >{hero.artists.audience}</span><br><em><span
+          data-title-part="italicPre"
+          data-artists={hero.artists.italicPre}
+          data-brands={hero.brands.italicPre}
+          data-creators={hero.creators.italicPre}
+        >{hero.artists.italicPre}</span><span
           data-title-part="contrast"
           data-artists={hero.artists.contrast}
           data-brands={hero.brands.contrast}
           data-creators={hero.creators.contrast}
-        >{hero.artists.contrast}</s>{hero.artists.italicPost}</em>
+        >{hero.artists.contrast}</span>{hero.artists.italicPost}</em>
     </h1>
     <p class="hero__body">
       <span data-content="artists">{hero.artists.body}</span>
@@ -235,6 +235,55 @@ const build = {
     </p>
     <div>
       <a href="#contact" class="cta-btn">Tell me what you're dreaming of</a>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       CASE STUDIES — horizontal scroll row of project cards
+       ============================================================ -->
+  <section class="case-studies" aria-labelledby="case-studies-title">
+    <p id="case-studies-title" class="case-studies__title">Case Studies</p>
+    <div class="case-studies__track">
+      <a href="/1-800-demo/" class="case-card">
+        <img
+          class="case-card__thumb"
+          src="/1-800-demo/thumb.webp"
+          width="72"
+          height="72"
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="case-card__body">
+          <span class="case-card__title case-card__title--pixel">
+            1-800 GIRLS
+          </span>
+        </div>
+      </a>
+
+      <a
+        href="https://batchbrew.xyz"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="case-card"
+      >
+        <img
+          class="case-card__thumb"
+          src="/bb-lp/bb-lp-thumb.webp"
+          width="72"
+          height="72"
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="case-card__body">
+          <span class="case-card__title case-card__title--bb">
+            <span class="case-card__title-bb-initial">B</span>atchbrew
+          </span>
+        </div>
+      </a>
     </div>
   </section>
 

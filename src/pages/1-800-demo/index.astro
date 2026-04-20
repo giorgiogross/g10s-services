@@ -1,5 +1,6 @@
 ---
 import App from "../../projects/1-800-demo/index";
+import LiquidGlassFilters from "../../components/LiquidGlassFilters.astro";
 ---
 
 <!doctype html>
@@ -16,7 +17,7 @@ import App from "../../projects/1-800-demo/index";
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;1,400&family=Jersey+10&display=swap"
       rel="stylesheet"
     />
     <script src="https://www.youtube.com/iframe_api" async></script>
@@ -39,6 +40,7 @@ import App from "../../projects/1-800-demo/index";
     </style>
   </head>
   <body>
+    <LiquidGlassFilters />
     <App client:only="react" />
   </body>
 </html>

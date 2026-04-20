@@ -5,7 +5,11 @@ export function TabBar() {
   const setTab = use1800DemoStore((s) => s.setTab);
 
   return (
-    <nav role="tablist" aria-label="Demo sections" className="td-tabbar">
+    <nav
+      role="tablist"
+      aria-label="Demo sections"
+      className="td-tabbar liquid-glass"
+    >
       <button
         type="button"
         role="tab"
@@ -24,17 +28,8 @@ export function TabBar() {
         className="td-tab"
       >
         <span className="td-tab-icon" aria-hidden="true">❖</span>
-        Sources
+        Artist
       </button>
-      <a
-        role="tab"
-        href="/"
-        aria-selected={false}
-        className="td-tab"
-      >
-        <span className="td-tab-icon" aria-hidden="true">◆</span>
-        g10s
-      </a>
     </nav>
   );
 }
