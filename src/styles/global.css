@@ -27,7 +27,10 @@
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
-    overflow-x: hidden;
+    /* `clip` (not `hidden`) prevents horizontal overflow without making the
+       body a scroll container, which was breaking position: fixed on the
+       brand and toggle-bar — they were scrolling with the page. */
+    overflow-x: clip;
   }
   img,
   svg,
@@ -284,13 +287,13 @@
     .toggle-bar {
       position: fixed;
       top: auto;
-      bottom: calc(16px + env(safe-area-inset-bottom));
+      bottom: calc(24px + env(safe-area-inset-bottom));
       left: 0;
       right: 0;
       padding: 0;
     }
     body {
-      padding-bottom: calc(80px + env(safe-area-inset-bottom));
+      padding-bottom: calc(88px + env(safe-area-inset-bottom));
     }
   }
 
@@ -361,7 +364,7 @@
   }
   .hero__title {
     font-family: var(--ff-display);
-    font-size: min(4.5vw, 3.1rem);
+    font-size: clamp(1.3rem, 6.5vw, 3.1rem);
     font-weight: 400;
     line-height: 1.18;
     letter-spacing: -0.022em;
@@ -522,8 +525,10 @@
     min-height: 380px;
     transition: box-shadow 0.5s ease;
   }
-  .package:hover {
-    box-shadow: var(--shadow-lg);
+  @media (hover: hover) {
+    .package:hover {
+      box-shadow: var(--shadow-lg);
+    }
   }
   .package__visual {
     position: relative;
@@ -558,13 +563,13 @@
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    width: 74.8%;
+    width: 225px;
   }
   .package__tulip-wrap--dahlia {
-    width: 82.28%;
+    width: 245px;
   }
   .package__tulip-wrap--lily {
-    width: 80.04%;
+    width: 240px;
   }
   .package__tulip-wrap--flip {
     transform: translateX(-50%) scaleX(-1);
@@ -585,14 +590,16 @@
   .package__tulip-img--mesh {
     opacity: 1;
   }
-  .package:hover .package__tulip-img {
-    transform: scale(1.04);
-  }
-  .package:hover .package__tulip-img--mesh {
-    opacity: 0;
-  }
-  .package:hover .package__tulip-img--colored {
-    opacity: 1;
+  @media (hover: hover) {
+    .package:hover .package__tulip-img {
+      transform: scale(1.04);
+    }
+    .package:hover .package__tulip-img--mesh {
+      opacity: 0;
+    }
+    .package:hover .package__tulip-img--colored {
+      opacity: 1;
+    }
   }
   .package__visual-meta {
     position: absolute;
@@ -762,13 +769,57 @@
     width: 44px;
     height: 44px;
     border-radius: 10px;
-    background: var(--mint-soft);
+    background: var(--paper, #fafaf7);
+    border: 1px solid var(--rule);
     display: grid;
     place-items: center;
     font-family: var(--ff-body);
     font-size: 0.65rem;
     font-weight: 600;
     letter-spacing: 0.05em;
+    color: var(--ink-strong);
+    overflow: hidden;
+  }
+  .project-card__logo img {
+    width: 70%;
+    height: 70%;
+    object-fit: contain;
+    display: block;
+  }
+  .project-card__video {
+    padding: 0 1.25rem 1.25rem;
+  }
+  .project-card__video video {
+    width: 50%;
+    max-width: 100%;
+    aspect-ratio: 9 / 16;
+    height: auto;
+    border-radius: var(--radius-md, 8px);
+    display: block;
+    background: #000;
+    margin: 0 auto;
+  }
+  .project-card__embed {
+    padding: 0 1.25rem 1.25rem;
+  }
+  .project-card__embed .instagram-media {
+    margin: 0 !important;
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+  .project-card__cta {
+    padding: 0 1.25rem 1.25rem;
+  }
+  .project-card__cta a {
+    font-family: var(--ff-body);
+    font-size: 0.86rem;
+    color: var(--ink-strong);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+  }
+  .project-card__cta a:hover,
+  .project-card__cta a:focus-visible {
     color: var(--accent);
   }
   .project-card__info h3 {
@@ -970,6 +1021,7 @@
     .how-steps {
       grid-template-rows: unset;
       min-height: unset;
+      row-gap: 2.5rem;
     }
     .step {
       grid-template-columns: 64px 1fr;
@@ -1200,6 +1252,27 @@
       margin-left: auto;
       margin-right: auto;
     }
+    .package__tulip-wrap {
+      width: 198px;
+    }
+    .package__tulip-wrap--dahlia {
+      width: 218px;
+    }
+    .package__tulip-wrap--lily {
+      width: 212px;
+    }
+    .package.is-focused {
+      box-shadow: var(--shadow-lg);
+    }
+    .package.is-focused .package__tulip-img {
+      transform: scale(1.04);
+    }
+    .package.is-focused .package__tulip-img--mesh {
+      opacity: 0;
+    }
+    .package.is-focused .package__tulip-img--colored {
+      opacity: 1;
+    }
     .about-grid {
       grid-template-columns: 1fr;
       gap: 3rem;
@@ -1222,8 +1295,8 @@
       padding: 4.5rem var(--gutter);
     }
     .hero {
-      padding: 5rem var(--gutter) 4rem;
-      min-height: 50vh;
+      padding: 4rem var(--gutter) 7rem;
+      min-height: 100svh;
     }
     .foot {
       flex-direction: column;

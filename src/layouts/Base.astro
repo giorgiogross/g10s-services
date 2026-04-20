@@ -184,10 +184,36 @@ const {
         }, 100);
       });
 
+      let instagramEmbedRequested = false;
+      function ensureInstagramEmbeds(): void {
+        const w = window as unknown as {
+          instgrm?: { Embeds?: { process?: () => void } };
+        };
+        if (w.instgrm?.Embeds?.process) {
+          w.instgrm.Embeds.process();
+          return;
+        }
+        if (instagramEmbedRequested) return;
+        instagramEmbedRequested = true;
+        const s = document.createElement("script");
+        s.async = true;
+        s.src = "https://www.instagram.com/embed.js";
+        document.body.appendChild(s);
+      }
+
       document.querySelectorAll<HTMLElement>("[data-project-toggle]").forEach((btn) => {
         btn.addEventListener("click", () => {
-          const item = btn.closest(".project-item");
-          if (item) item.classList.toggle("open");
+          const card = btn.closest<HTMLElement>(".project-card");
+          if (!card) return;
+          const isOpen = card.classList.toggle("open");
+          if (!isOpen) return;
+          const video = card.querySelector<HTMLVideoElement>("video[data-project-video]");
+          if (video && !video.src && video.dataset.src) {
+            video.src = video.dataset.src;
+          }
+          if (card.dataset.embed === "instagram") {
+            ensureInstagramEmbeds();
+          }
         });
       });
 
@@ -203,6 +229,42 @@ const {
         { rootMargin: "-8% 0px -8% 0px", threshold: 0.05 },
       );
       document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+
+      // ── Scroll-driven "hover" for packages on the mobile column layout ──
+      // Hover doesn't exist on touch, so the package whose body sits in the
+      // vertical middle third of the viewport gets .is-focused instead.
+      const packageFocusMq = window.matchMedia("(max-width: 900px)");
+      let packageFocusIo: IntersectionObserver | null = null;
+
+      function enablePackageFocus(): void {
+        if (packageFocusIo) return;
+        packageFocusIo = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              entry.target.classList.toggle("is-focused", entry.isIntersecting);
+            }
+          },
+          { rootMargin: "-33.3333% 0px -33.3333% 0px", threshold: 0 },
+        );
+        document
+          .querySelectorAll<HTMLElement>(".package")
+          .forEach((p) => packageFocusIo!.observe(p));
+      }
+
+      function disablePackageFocus(): void {
+        if (!packageFocusIo) return;
+        packageFocusIo.disconnect();
+        packageFocusIo = null;
+        document
+          .querySelectorAll<HTMLElement>(".package.is-focused")
+          .forEach((p) => p.classList.remove("is-focused"));
+      }
+
+      if (packageFocusMq.matches) enablePackageFocus();
+      packageFocusMq.addEventListener("change", (e) => {
+        if (e.matches) enablePackageFocus();
+        else disablePackageFocus();
+      });
     </script>
   </body>
 </html>

@@ -1,10 +1,16 @@
 /* Shared liquid-glass utility.
    Any element that should look like frosted refractive glass gets the
-   `.liquid-glass` class. Chromium/Firefox get real refraction via the
-   SVG displacement filter (#g10s-liquid-glass from
-   src/components/LiquidGlassFilters.astro). Safari/iOS silently drop
-   the url() filter — they can't support `backdrop-filter: url(...)` —
-   and fall back to blur + saturate alone, which still reads as glass. */
+   `.liquid-glass` class.
+
+   Base declaration is Safari-safe (plain blur + saturate) — Safari
+   treats -webkit-backdrop-filter and backdrop-filter as aliases of the
+   same property, so if the "winning" declaration contains `url(#...)`
+   (which Safari can't render inside backdrop-filter), Safari drops the
+   whole thing and no glass shows up.
+
+   The SVG displacement refraction (#g10s-liquid-glass) is then layered
+   in via a Safari-negative @supports query so Chromium/Firefox get the
+   real refraction without affecting Safari's base look. */
 
 .liquid-glass {
   --glass-tint: #bbbbbc;
@@ -15,7 +21,7 @@
 
   background: color-mix(in srgb, var(--glass-tint) 12%, transparent);
   -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
-  backdrop-filter: blur(var(--glass-blur)) url(#g10s-liquid-glass) saturate(var(--glass-saturation));
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
   box-shadow:
     inset 0 0 0 1px color-mix(in srgb, var(--glass-light) calc(var(--glass-reflex) * 10%), transparent),
     inset 1.8px 3px 0 -2px color-mix(in srgb, var(--glass-light) calc(var(--glass-reflex) * 90%), transparent),
@@ -24,6 +30,17 @@
     inset -1px 2px 3px -1px color-mix(in srgb, var(--glass-light) calc(var(--glass-reflex) * 40%), transparent),
     0 14px 36px rgba(0, 0, 0, 0.12),
     0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Layer in the SVG displacement refraction on everything that isn't
+   Safari. `-webkit-named-image(apple-pay-logo-white)` is a Safari-only
+   value, so `@supports not (...)` is true in Chrome/Firefox and false
+   in Safari. Safari therefore keeps the plain blur + saturate from
+   above; everyone else gets the url(#...) enhancement. */
+@supports not (background: -webkit-named-image(apple-pay-logo-white)) {
+  .liquid-glass {
+    backdrop-filter: blur(var(--glass-blur)) url(#g10s-liquid-glass) saturate(var(--glass-saturation));
+  }
 }
 
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {

@@ -97,31 +97,56 @@ const examples = {
   ],
 } as const;
 
-// Only four projects shown on the right of the about paragraph.
-const projects = [
+type Project = {
+  logo: string;
+  title: string;
+  summary?: string;
+  body?: string;
+  video?: string;
+  embed?: "instagram";
+  href?: string;
+  cta?: string;
+};
+
+const projects: Project[] = [
   {
-    logo: "BB",
+    logo: "/bb_logo.svg",
     title: "Batchbrew",
     summary: "Creative workspace with AI integrations",
-    body: "Complex product with semantic search, real-time sync, and collaborative whiteboards. Built solo — competitors need 4-person teams for the same thing.",
+    body: "Add inspiration and research to collaborative whiteboards and sync your data across all your devices. Automatically creates a searchable library for your curated saves. Built solo — competitors need 4-person teams for the same thing.",
+    href: "https://batchbrew.xyz",
+    cta: "Go to Batchbrew",
   },
   {
-    logo: "YC",
-    title: "YC-backed startup",
-    summary: "Prototyping a new product direction",
-    body: "Prototyped a new product direction for an early-stage company in the Y Combinator network. Rapid iteration from concept to testable prototype.",
+    logo: "/wave-sine.svg",
+    title: "Camera Control Synthesizer",
+    summary: "An instrument you play with your webcam",
+    video: "https://cofzhirmlrbeifndntdo.supabase.co/storage/v1/object/public/product-images/g10s-services-assets/cam-controlled-synth.MOV",
   },
   {
-    logo: "10K",
-    title: "Seed-stage product",
-    summary: "Scaled to 10,000 users",
-    body: "Joined a funded team and helped build the product from early traction to its first 10,000 users. Core features, architecture decisions, UX direction.",
+    logo: "/scalable-logo.svg",
+    title: "Scalable",
+    summary: "From zero to the first 2,000 users",
+    body: "Joined a non-technical founder as first engineer on a bootstrapped team. Built the technical foundation, shipped core features and security work, and was on board scaling from zero to the first 2,000 users.",
+    href: "https://www.scalable.so/",
+    cta: "Go to Scalable",
   },
   {
-    logo: "EXT",
-    title: "Chrome extension",
-    summary: "10K active users",
-    body: "Built core features for a browser extension that grew to 10,000 active users.",
+    logo: "/reelio-logo.svg",
+    title: "Reelio",
+    summary: "Deliver Netflix-quality videos to online stores.",
+    body: "Video streaming infrastructure for ecommerce — adaptive bitrate, edge delivery, and a lightweight player tuned for product pages. Sold to a different owner in an early pre-revenue phase.",
+    href: "https://reelio.io/",
+    cta: "Go to Reelio",
+  },
+  {
+    logo: "/hand-sparkles-filled.svg",
+    title: "Gesture Controlled Whiteboard",
+    summary: "Control your mood board with your web cam",
+    body: "A UX experiment where I built out a touch-less UX concept for my whiteboard app. Users can pan, zoom and drag using their hands.",
+    embed: "instagram",
+    href: "https://www.instagram.com/p/DW3p7quDG0K/",
+    cta: "Open on Instagram",
   },
 ];
 
@@ -355,7 +380,7 @@ const build = {
         <p>
           Software engineer, product designer, and builder. I've built 6 products
           from scratch, worked with 4 startup teams from early stage to thousands
-          of users, and spent the last year studying what makes brands and
+          of users, and spent the last years studying what makes brands and
           creative culture feel alive. I work solo, move fast, and care deeply
           about how things feel — not just how they function.
         </p>
@@ -365,18 +390,50 @@ const build = {
         <div class="projects-label">Selected projects</div>
         <div class="project-stack">
           {projects.map((p) => (
-            <div class="project-card">
+            <div class="project-card" data-embed={p.embed}>
               <button type="button" class="project-card__header" data-project-toggle>
-                <div class="project-card__logo">{p.logo}</div>
+                <span class="project-card__logo">
+                  <img src={p.logo} alt="" aria-hidden="true" />
+                </span>
                 <div class="project-card__info">
                   <h3>{p.title}</h3>
-                  <span>{p.summary}</span>
+                  {p.summary && <span>{p.summary}</span>}
                 </div>
                 <span class="project-card__icon" aria-hidden="true">+</span>
               </button>
               <div class="project-card__body">
                 <div class="project-card__body-inner">
-                  <p>{p.body}</p>
+                  {p.video ? (
+                    <div class="project-card__video">
+                      <video
+                        data-project-video
+                        data-src={p.video}
+                        preload="none"
+                        controls
+                        playsinline
+                      ></video>
+                    </div>
+                  ) : (
+                    <>
+                      {p.body && <p>{p.body}</p>}
+                      {p.embed === "instagram" && p.href && (
+                        <div class="project-card__embed">
+                          <blockquote
+                            class="instagram-media"
+                            data-instgrm-permalink={p.href}
+                            data-instgrm-version="14"
+                          >
+                            <a href={p.href}>View on Instagram</a>
+                          </blockquote>
+                        </div>
+                      )}
+                    </>
+                  )}
+                  {p.href && p.cta && (
+                    <div class="project-card__cta">
+                      <a href={p.href} target="_blank" rel="noopener noreferrer">{p.cta}</a>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

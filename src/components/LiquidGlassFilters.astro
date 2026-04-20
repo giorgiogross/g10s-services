@@ -17,7 +17,19 @@
   style="position:absolute;width:0;height:0;overflow:hidden;pointer-events:none;"
 >
   <defs>
-    <filter id="g10s-liquid-glass" primitiveUnits="objectBoundingBox">
+    <!-- Generous filter region so displaced pixels near the corners are
+         still sampled from inside the filter buffer rather than from
+         the transparent void outside it (that's the "hole" symptom).
+         scale is kept small for the same reason — 0.4 was pushing
+         bottom-right pixels ~40% of the element size off the edge. -->
+    <filter
+      id="g10s-liquid-glass"
+      primitiveUnits="objectBoundingBox"
+      x="-25%"
+      y="-25%"
+      width="150%"
+      height="150%"
+    >
       <feImage
         href="/liquid-map.webp"
         x="0"
@@ -31,7 +43,7 @@
       <feDisplacementMap
         in="blur"
         in2="map"
-        scale="0.4"
+        scale="0.08"
         xChannelSelector="R"
         yChannelSelector="G"
       />
