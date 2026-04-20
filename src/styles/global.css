@@ -563,13 +563,13 @@
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    width: 225px;
+    width: 74.8%;
   }
   .package__tulip-wrap--dahlia {
-    width: 245px;
+    width: 82.28%;
   }
   .package__tulip-wrap--lily {
-    width: 240px;
+    width: 80.04%;
   }
   .package__tulip-wrap--flip {
     transform: translateX(-50%) scaleX(-1);
