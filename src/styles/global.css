@@ -1152,6 +1152,19 @@
     overflow: hidden;
     isolation: isolate;
   }
+  /* Wrapper so we can fade the whole layer in after the card reveals, while
+     the individual bar animations keep their own opacity timelines. */
+  .differentiator-card__bars {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 1.2s var(--ease-out) 3s;
+  }
+  .differentiator-section.is-visible .differentiator-card__bars {
+    opacity: 1;
+  }
   /* Two diagonal orange bars behind the frosted glass. The primary sweeps
      left/right (10% → 40% from the right), the secondary stays anchored at
      10% and widens as the primary moves away — giving the impression of a
@@ -1164,7 +1177,6 @@
     border-radius: 999px;
     transform: rotate(30deg);
     transform-origin: center;
-    z-index: -2;
     pointer-events: none;
     will-change: right, width, opacity;
   }
