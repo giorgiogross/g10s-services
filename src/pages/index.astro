@@ -1,5 +1,6 @@
 ---
 import Base from "../layouts/Base.astro";
+import CtaButton from "../components/CtaButton.astro";
 
 const hero = {
   artists: {
@@ -10,7 +11,7 @@ const hero = {
     italicPre: "to stick in ",
     contrast: "listener's minds",
     italicPost: ".",
-    body: "I equip independent artists with custom-built digital experiences, to help them stand out in a crowded market. Big labels pay $20K+ for this — I make it happen at a fraction.",
+    body: "I make custom-built digital experiences for independent artists, to help them stand out in a crowded market. Big labels pay $20K+ for this — I make it happen at a fraction.",
   },
   brands: {
     prefix: "Unique ",
@@ -20,7 +21,7 @@ const hero = {
     italicPre: "to earn ",
     contrast: "trust",
     italicPost: ".",
-    body: "I equip emerging brands with custom-built digital experiences, to help them stand out in a crowded market. Big names pay $20K+ for this — I make it happen at a fraction.",
+    body: "I make custom-built digital experiences for emerging brands, to help them stand out in a crowded market. Big names pay $20K+ for this — I make it happen at a fraction.",
   },
   creators: {
     prefix: "Unique ",
@@ -30,7 +31,7 @@ const hero = {
     italicPre: "to deepen ",
     contrast: "connections",
     italicPost: ".",
-    body: "I equip solo creators with custom-built digital experiences, to help them stand out in a crowded market. Funded studios pay $20K+ for this — I make it happen at a fraction.",
+    body: "I make custom-built digital experiences for solo creators, to help them stand out in a crowded market. Funded studios pay $20K+ for this — I make it happen at a fraction.",
   },
 } as const;
 
@@ -160,54 +161,85 @@ const reviews = [
 const howSteps = [
   {
     title: "You bring the taste and creative direction",
-    body: "You know your world better than anyone. You set the direction — what it should feel like, who it's for, what it needs to do. I bring the technical ability to make it real.",
+    body: "You know your world better than anyone. You set the direction and ideas, I bring the technical ability to make it real.",
   },
   {
     title: "We simplify your idea down to the core",
-    body: "Most ideas start big. I use my experience to help you cut the scope to the one thing that matters — the smallest version that still stands out. No bloat, no feature creep. One thing, done well.",
+    body: "Most ideas start big. I use my experience to help you cut the scope to the one thing that matters. One thing, done well.",
   },
   {
-    title: "I build it — fast, under your direction",
-    body: "Software engineering, design, architecture — all in one person. The result is a small, focused digital asset that does one thing beautifully and reflects your identity. Not a big app that tries to do everything.",
+    title: "We build it together",
+    body: "I'll set up a strong tech foundation and the first version, and give you tools to work with me on the details. The more you take over, the more money you save.",
   },
   {
-    title: "You get the codebase, the guidance, and an AI assistant",
-    body: "You own the code. I walk you through how to make edits yourself, set up an AI assistant I built to help you maintain and evolve it, and document everything. You're responsible for running it from here — but you have the tools to keep building on your own.",
+    title: "You get the codebase",
+    body: "You get the code, detailed documentation, and my ai tools to make edits yourself. I'll include a guide on how to host it on your website, or can help you run it on the web as an add-on.",
   },
 ];
 
-const blueprint = {
-  name: "Blueprint",
-  tagline: "Clarity, scope, and a landing page.",
-  features: [
-    "Complexity assessment & simplification",
-    "Roadmap",
-    "Feature concepts",
-    "Dev tooling & workflow setup",
-    "Market research & audience assessment",
-    "Custom-built landing page + waitlist",
-  ],
-  diy: "1–2 weeks scattered",
-  agency: "€4–9K",
-  price: "€500",
-  duration: "3 days",
+type Tier = {
+  key: string;
+  name: string;
+  description: string;
+  price: string;
+  duration: string;
+  diySummary: string;
+  agencySummary: string;
+  moneyBack: string | null;
 };
 
-const build = {
-  name: "Build",
-  tagline: "Once you're happy with the blueprint, I can also build the first version for you.",
-  includesBlueprint: true,
-  features: [
-    "Solid tech foundation",
-    "First working version",
-    "Handoff + codebase ownership",
-    "AI assistant for maintenance",
-  ],
-  diy: "Months · high chance of giving up",
-  agency: "€15–30K",
-  price: "€3,500",
-  duration: "2 weeks",
+type InclValue = "yes" | "no" | string;
+
+type Benefit = {
+  name: string;
+  diy: string;
+  agency: string;
+  incl: [InclValue, InclValue, InclValue];
 };
+
+const tiers: Tier[] = [
+  {
+    key: "blueprint",
+    name: "Blueprint",
+    description: "Full project outline, ready for you to take over",
+    price: "€500",
+    duration: "1wk",
+    diySummary: "1–2wk scattered",
+    agencySummary: "€4–9K",
+    moneyBack: "100%",
+  },
+  {
+    key: "cobuild",
+    name: "Co-Build",
+    description: "I build the foundation, you build the experience",
+    price: "€3,500",
+    duration: "2wk",
+    diySummary: "Months · risk of stalling",
+    agencySummary: "€15–30K",
+    moneyBack: "100%",
+  },
+  {
+    key: "hands-off",
+    name: "Hands-off",
+    description: "I build it all for you",
+    price: "from €10K",
+    duration: "6wk+",
+    diySummary: "4–7mo solo",
+    agencySummary: "€40K+",
+    moneyBack: null,
+  },
+];
+
+const benefits: Benefit[] = [
+  { name: "Concept planning", diy: "5–6d", agency: "€2,000", incl: ["yes", "yes", "yes"] },
+  { name: "Dev tooling & workflow setup", diy: "1-2d", agency: "€500", incl: ["yes", "yes", "yes"] },
+  { name: "Market research & audience", diy: "3–5d", agency: "€2,200", incl: ["yes", "yes", "yes"] },
+  { name: "Custom landing page + waitlist", diy: "1wk", agency: "€3,000", incl: ["yes", "yes", "yes"] },
+  { name: "Solid tech foundation", diy: "1–2wk", agency: "€4,000", incl: ["no", "yes", "yes"] },
+  { name: "First working version", diy: "1–2mo", agency: "€15,000", incl: ["no", "yes", "yes"] },
+  { name: "Handoff + codebase ownership", diy: "—", agency: "rare", incl: ["no", "yes", "yes"] },
+  { name: "Run it on the web", diy: "2–4mo", agency: "€15–25K", incl: ["no", "no", "yes"] },
+];
 ---
 
 <Base>
@@ -259,7 +291,7 @@ const build = {
       <span data-content="creators" style="display:none">{hero.creators.body}</span>
     </p>
     <div>
-      <a href="#contact" class="cta-btn">Tell me what you're dreaming of</a>
+      <CtaButton href="#contact" />
     </div>
   </section>
 
@@ -313,10 +345,53 @@ const build = {
   </section>
 
   <!-- ============================================================
+       DIFFERENTIATOR — single card with check-marked perks
+       ============================================================ -->
+  <section class="section differentiator-section reveal">
+    <aside class="differentiator-card">
+      <h2 class="differentiator-card__title">What I do different</h2>
+      <ul class="differentiator-card__list">
+        <li class="differentiator-card__item">
+          <span class="differentiator-card__check" aria-hidden="true">
+            <svg width="8" height="8" viewBox="0 0 10 10">
+              <path d="M2 5.2l2 2L8 3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </span>
+          <span>Get your first version fast, within a week</span>
+        </li>
+        <li class="differentiator-card__item">
+          <span class="differentiator-card__check" aria-hidden="true">
+            <svg width="8" height="8" viewBox="0 0 10 10">
+              <path d="M2 5.2l2 2L8 3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </span>
+          <span>Save money by getting involved</span>
+        </li>
+        <li class="differentiator-card__item">
+          <span class="differentiator-card__check" aria-hidden="true">
+            <svg width="8" height="8" viewBox="0 0 10 10">
+              <path d="M2 5.2l2 2L8 3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </span>
+          <span>Adjust your product, without coding skill</span>
+        </li>
+        <li class="differentiator-card__item">
+          <span class="differentiator-card__check" aria-hidden="true">
+            <svg width="8" height="8" viewBox="0 0 10 10">
+              <path d="M2 5.2l2 2L8 3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </span>
+          <span>You own your code</span>
+        </li>
+      </ul>
+    </aside>
+  </section>
+
+  <!-- ============================================================
        EXAMPLES — packaging-label cards
        ============================================================ -->
   <section class="section examples-section reveal">
-    <h2 class="section-heading">Imagine what you could create</h2>
+    <h2 class="section-heading">Some stuff I could create for you</h2>
 
     {(["artists", "brands", "creators"] as const).map((key) => (
       <div class="package-grid" data-content={key} style={key === "artists" ? "" : "display:none"}>
@@ -363,7 +438,7 @@ const build = {
     ))}
 
     <div class="examples-cta">
-      <a href="#contact" class="cta-btn">I have an idea</a>
+      <CtaButton href="#contact" />
     </div>
   </section>
 
@@ -373,21 +448,29 @@ const build = {
   <section class="section about-section reveal">
     <div class="about-grid">
       <div class="about-content">
-        <div class="about-identity">
+        <article class="about-tweet">
           <div class="about-photo" role="img" aria-label="Giorgio"></div>
-          <h2>I'm Giorgio</h2>
-        </div>
-        <p>
-          Software engineer, product designer, and builder. I've built 6 products
-          from scratch, worked with 4 startup teams from early stage to thousands
-          of users, and spent the last years studying what makes brands and
-          creative culture feel alive. I work solo, move fast, and care deeply
-          about how things feel — not just how they function.
-        </p>
+          <div class="about-tweet__body-col">
+            <header class="about-tweet__identity">
+              <h2 class="about-tweet__name">Giorgio</h2>
+              <span class="about-tweet__handle">@g10s.xyz</span>
+            </header>
+            <p class="about-tweet__body">
+              Hi I'm Giorgio,
+              <br /><br />
+              I'm a product architect. I've built 6
+              products from scratch, worked with 4 startup teams from early
+              stage to thousands of users, and spent the last years studying
+              what makes brands and creative culture feel alive. I love to build
+              meaningful user experience and unique products that feel and function
+              great. 
+            </p>
+          </div>
+        </article>
       </div>
 
       <div class="about-projects">
-        <div class="projects-label">Selected projects</div>
+        <div class="projects-label">What I made before</div>
         <div class="project-stack">
           {projects.map((p) => (
             <div class="project-card" data-embed={p.embed}>
@@ -483,68 +566,147 @@ const build = {
   </section>
 
   <!-- ============================================================
-       PACKAGES — pricing cards
+       PACKAGES — single pricing card with tier selector
        ============================================================ -->
   <section class="section packages-section reveal">
-    <div class="section-label">Packages</div>
-    <p class="packages-intro">
-      Two packages. One gets you clarity and a landing page. The other gets you a
-      working product you can build on.
-    </p>
+    <div class="packages-header">
+      <div class="packages-header__title">
+        <div class="section-label">Packages</div>
+        <h2 class="packages-heading">
+          Pricing that supports <span
+            data-title-part
+            data-artists="independent artists"
+            data-brands="emerging brands"
+            data-creators="solo creators"
+          >independent artists</span>
+        </h2>
+      </div>
+      <p class="packages-caption">
+        g10s' reason to exist is to support <span
+          data-title-part
+          data-artists="artists"
+          data-brands="brands"
+          data-creators="creators"
+        >artists</span> with less resources to stand up against larger competitors. I'll handle all the hard parts of web and app development, and give you tools where you can get hands on. You build high-grade tech with me as a seasoned product engineer on your side.
+      </p>
+    </div>
 
-    <div class="pricing-grid">
-      <div class="pricing-card pricing-card--featured">
-        <header class="pricing-card__head">
-          <h3>{blueprint.name}</h3>
-          <p>{blueprint.tagline}</p>
-        </header>
-        <ul class="pricing-card__features">
-          {blueprint.features.map((f) => <li>{f}</li>)}
-        </ul>
-        <div class="pricing-totals">
-          <div class="pricing-total">
-            <div class="pricing-total__label">DIY</div>
-            <div class="pricing-total__value pricing-total__value--time">{blueprint.diy}</div>
-          </div>
-          <div class="pricing-total">
-            <div class="pricing-total__label">Agency</div>
-            <div class="pricing-total__value pricing-total__value--strike">{blueprint.agency}</div>
-          </div>
-          <div class="pricing-total pricing-total--ours">
-            <div class="pricing-total__label">g10s</div>
-            <div class="pricing-total__value">{blueprint.price}</div>
-            <div class="pricing-total__sub">{blueprint.duration}</div>
-          </div>
+    <div class="pricing-card pricing-card--featured pricing-card--single" data-pricing-card data-tier="0">
+      <div class="tier-selector" role="radiogroup" aria-label="Choose your plan">
+        <div class="tier-selector__label">Choose your plan</div>
+        <div class="tier-selector__buttons">
+          {tiers.map((t, i) => (
+            <button
+              type="button"
+              class={`tier-btn${i === 0 ? " is-active" : ""}`}
+              data-tier-btn={i}
+              role="radio"
+              aria-checked={i === 0 ? "true" : "false"}
+            >
+              <span class="tier-btn__name">{t.name}</span>
+              <span class="tier-btn__desc">{t.description}</span>
+            </button>
+          ))}
         </div>
       </div>
 
-      <div class="pricing-card">
-        <header class="pricing-card__head">
-          <h3>{build.name}</h3>
-          <p>{build.tagline}</p>
-        </header>
-        <p class="pricing-card__includes">Everything in Blueprint, plus:</p>
-        <ul class="pricing-card__features">
-          {build.features.map((f) => <li>{f}</li>)}
-        </ul>
-        <div class="pricing-totals">
-          <div class="pricing-total">
-            <div class="pricing-total__label">DIY</div>
-            <div class="pricing-total__value pricing-total__value--time">{build.diy}</div>
-          </div>
-          <div class="pricing-total">
-            <div class="pricing-total__label">Agency</div>
-            <div class="pricing-total__value pricing-total__value--strike">{build.agency}</div>
-          </div>
-          <div class="pricing-total pricing-total--ours">
-            <div class="pricing-total__label">g10s</div>
-            <div class="pricing-total__value">{build.price}</div>
-            <div class="pricing-total__sub">{build.duration}</div>
+      <div class="benefits-table" role="table" aria-label="Package benefits">
+        <div class="benefits-table__head" role="row">
+          <span role="columnheader" aria-label="Benefit"></span>
+          <span role="columnheader">DIY</span>
+          <span role="columnheader">Agency</span>
+        </div>
+        {benefits.map((b) => {
+          const first = b.incl[0];
+          const hasBadge = first !== "yes" && first !== "no";
+          return (
+            <div
+              class={`benefits-table__row${first === "no" ? " is-excluded" : ""}`}
+              data-incl={JSON.stringify(b.incl)}
+              role="row"
+            >
+              <span class="benefits-table__name">
+                <span class="benefits-table__name-text">{b.name}</span>
+                <span class="benefits-table__badge" data-badge>{hasBadge ? first : ""}</span>
+              </span>
+              <span class="benefits-table__cost" data-col="diy">{b.diy}</span>
+              <span class="benefits-table__cost benefits-table__cost--agency" data-col="agency">{b.agency}</span>
+            </div>
+          );
+        })}
+      </div>
+
+      <div class="pricing-totals">
+        <div class="pricing-total pricing-total--totals-name">
+          <span class="pricing-total__label">Total</span>
+        </div>
+        <div class="pricing-total pricing-total--totals-diy">
+          <div class="pricing-total__value pricing-total__value--time" data-total-diy>{tiers[0].diySummary}</div>
+        </div>
+        <div class="pricing-total pricing-total--agency-ours">
+          <div class="pricing-total__value pricing-total__value--strike" data-total-agency>{tiers[0].agencySummary}</div>
+          <div class="pricing-total__ours">
+            <span class="pricing-total__ours-price" data-total-price>{tiers[0].price}</span>
+            <span class="pricing-total__ours-sub" data-total-duration>{tiers[0].duration}</span>
+            <span class="pricing-total__guarantee" data-total-guarantee>{tiers[0].moneyBack ? `${tiers[0].moneyBack} money-back guarantee` : ""}</span>
           </div>
         </div>
       </div>
     </div>
   </section>
+
+  <script define:vars={{ tiersData: tiers }}>
+    (function () {
+      const card = document.querySelector("[data-pricing-card]");
+      if (!card) return;
+      const buttons = card.querySelectorAll("[data-tier-btn]");
+      const rows = card.querySelectorAll(".benefits-table__row");
+      const diyEl = card.querySelector("[data-total-diy]");
+      const agencyEl = card.querySelector("[data-total-agency]");
+      const priceEl = card.querySelector("[data-total-price]");
+      const durationEl = card.querySelector("[data-total-duration]");
+      const guaranteeEl = card.querySelector("[data-total-guarantee]");
+
+      function render(tier) {
+        card.dataset.tier = String(tier);
+        buttons.forEach(function (btn, i) {
+          const active = i === tier;
+          btn.classList.toggle("is-active", active);
+          btn.setAttribute("aria-checked", active ? "true" : "false");
+        });
+
+        rows.forEach(function (row) {
+          let incl;
+          try {
+            incl = JSON.parse(row.dataset.incl || "[]");
+          } catch (_) {
+            incl = [];
+          }
+          const value = incl[tier];
+          row.classList.toggle("is-excluded", value === "no");
+          const badge = row.querySelector("[data-badge]");
+          if (badge) badge.textContent = value === "yes" || value === "no" ? "" : value;
+        });
+
+        const t = tiersData[tier];
+        diyEl.textContent = t.diySummary;
+        agencyEl.textContent = t.agencySummary;
+        priceEl.textContent = t.price;
+        durationEl.textContent = t.duration;
+        if (guaranteeEl) {
+          guaranteeEl.textContent = t.moneyBack ? t.moneyBack + " money-back guarantee" : "";
+        }
+      }
+
+      buttons.forEach(function (btn, i) {
+        btn.addEventListener("click", function () {
+          render(i);
+        });
+      });
+
+      render(0);
+    })();
+  </script>
 
   <!-- ============================================================
        FINAL CTA
@@ -555,7 +717,7 @@ const build = {
       No pitch deck needed. Just tell me what you're dreaming of and we'll figure
       out if I can help make it real.
     </p>
-    <a href="mailto:lab@g10s.xyz" class="cta-btn">lab@g10s.xyz</a>
+    <CtaButton href="mailto:lab@g10s.xyz" />
   </section>
 
   <!-- ============================================================

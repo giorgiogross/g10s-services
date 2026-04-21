@@ -160,6 +160,10 @@ export default function App() {
         >
           <GameCanvas ref={gameRef} />
         </Device>
+        <p className="td-disclaimer">
+          DISCLAIMER: this is a case study, not an official collaboration with
+          the artist
+        </p>
         <a
           href={YOUTUBE_VIDEO_URL}
           target="_blank"
