@@ -151,11 +151,37 @@ const projects: Project[] = [
   },
 ];
 
-const reviews = [
-  { name: "Name", text: "Placeholder review text. Replace with real testimonial from a past client or collaborator." },
-  { name: "Name", text: "Placeholder review text. Replace with real testimonial from a past client or collaborator." },
-  { name: "Name", text: "Placeholder review text. Replace with real testimonial from a past client or collaborator." },
-  { name: "Name", text: "Placeholder review text. Replace with real testimonial from a past client or collaborator." },
+type Review = {
+  name: string;
+  role: string;
+  text: string;
+  photo?: string;
+  linkedin?: string;
+  instagram?: string;
+};
+
+const reviews: Review[] = [
+  {
+    name: "Jacob",
+    role: "Ecom branding, non-technical founder",
+    photo: "/jacob.jpeg",
+    linkedin: "https://www.linkedin.com/in/jvcob/",
+    text: "I built Scalable with AI coding tools, but it was only after Giorgio joined that the code base got reliable and mature enough to support our first 2k sign ups. He brought serious technical ability to our team to launch our product off the ground and built core elements that helped establish our web app early on.",
+  },
+  {
+    name: "Raoul",
+    role: "Consultant",
+    photo: "/raoul.jpeg",
+    linkedin: "https://www.linkedin.com/in/raoul-schwagmeier/",
+    text: "Our concept sessions were very eye opening; I started out with a big complicated idea, but Giorgio helped me to break it down and show me what and how to work on it.",
+  },
+  {
+    name: "Lena",
+    role: "IG creator, hospitality manager",
+    photo: "/lena.jpg",
+    instagram: "https://www.instagram.com/lenac.life/",
+    text: "I had an idea for months but had no idea where to start. Giorgio worked out the concept with me. He saved me so much time and helped me avoid making expensive mistakes. I now know exactly what to focus on.",
+  },
 ];
 
 const howSteps = [
@@ -169,11 +195,11 @@ const howSteps = [
   },
   {
     title: "We build it together",
-    body: "I'll set up a strong tech foundation and the first version, and give you tools to work with me on the details. The more you take over, the more money you save.",
+    body: "We work out the concept, and I set up a strong tech foundation for the first product version. The more you take over, the more money you save.",
   },
   {
-    title: "You get the codebase",
-    body: "You get the code, detailed documentation, and my ai tools to make edits yourself. I'll include a guide on how to host it on your website, or can help you run it on the web as an add-on.",
+    title: "You get the product, ready for hosting",
+    body: "You get the code, detailed documentation, and my ai tools to make edits yourself. The only step left for you is to get it online, but I can help you do that with a guide or do it for you as an add-on.",
   },
 ];
 
@@ -204,8 +230,8 @@ const tiers: Tier[] = [
     description: "Full project outline, ready for you to take over",
     price: "€500",
     duration: "1wk",
-    diySummary: "1–2wk scattered",
-    agencySummary: "€4–9K",
+    diySummary: "2–3wk",
+    agencySummary: "€6–9K",
     moneyBack: "100%",
   },
   {
@@ -214,18 +240,18 @@ const tiers: Tier[] = [
     description: "I build the foundation, you build the experience",
     price: "€3,500",
     duration: "2wk",
-    diySummary: "Months · risk of stalling",
-    agencySummary: "€15–30K",
+    diySummary: "2–3mo",
+    agencySummary: "€22–32K",
     moneyBack: "100%",
   },
   {
     key: "hands-off",
     name: "Hands-off",
     description: "I build it all for you",
-    price: "from €10K",
+    price: "from €10k",
     duration: "6wk+",
-    diySummary: "4–7mo solo",
-    agencySummary: "€40K+",
+    diySummary: "4–7mo",
+    agencySummary: "€42–55K",
     moneyBack: null,
   },
 ];
@@ -291,7 +317,7 @@ const benefits: Benefit[] = [
       <span data-content="creators" style="display:none">{hero.creators.body}</span>
     </p>
     <div>
-      <CtaButton href="#contact" />
+      <CtaButton href="mailto:lab@g10s.xyz" />
     </div>
   </section>
 
@@ -438,7 +464,7 @@ const benefits: Benefit[] = [
     ))}
 
     <div class="examples-cta">
-      <CtaButton href="#contact" />
+      <CtaButton href="mailto:lab@g10s.xyz" />
     </div>
   </section>
 
@@ -530,15 +556,70 @@ const benefits: Benefit[] = [
        REVIEWS — large centered title, cards
        ============================================================ -->
   <section class="section reviews-section reveal">
-    <h2 class="reviews-heading">What people say</h2>
+    <h2 class="reviews-heading">What others say</h2>
     <div class="reviews-grid">
       {reviews.map((r) => (
         <div class="review-card">
           <div class="review-card__top">
-            <div class="review-card__photo" aria-hidden="true"></div>
-            <div>
-              <div class="review-card__name">{r.name}</div>
-              <div class="review-card__stars">★★★★★</div>
+            {r.photo ? (
+              <div
+                class="review-card__photo review-card__photo--image"
+                role="img"
+                aria-label={r.name}
+                style={`background-image: url(${r.photo});`}
+              ></div>
+            ) : (
+              <div class="review-card__photo" aria-hidden="true"></div>
+            )}
+            <div class="review-card__identity">
+              <div class="review-card__name">
+                {r.name}
+                {r.linkedin && (
+                  <a
+                    class="review-card__social"
+                    href={r.linkedin}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    aria-label={`${r.name} on LinkedIn`}
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="14"
+                      height="14"
+                      aria-hidden="true"
+                      focusable="false"
+                    >
+                      <path
+                        fill="currentColor"
+                        d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.15 1.45-2.15 2.95v5.66H9.34V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45zM22.23 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.72V1.72C24 .77 23.21 0 22.23 0z"
+                      />
+                    </svg>
+                  </a>
+                )}
+                {r.instagram && (
+                  <a
+                    class="review-card__social review-card__social--ig"
+                    href={r.instagram}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    aria-label={`${r.name} on Instagram`}
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="14"
+                      height="14"
+                      aria-hidden="true"
+                      focusable="false"
+                    >
+                      <path
+                        fill="currentColor"
+                        d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.7 3.7 0 0 1-1.38-.9 3.7 3.7 0 0 1-.9-1.38c-.16-.42-.36-1.06-.41-2.23-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.17 8.8 2.16 12 2.16zM12 0C8.74 0 8.33.01 7.05.07 5.78.13 4.9.33 4.14.63a5.85 5.85 0 0 0-2.12 1.38A5.85 5.85 0 0 0 .63 4.14c-.3.76-.5 1.64-.56 2.91C.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.27.26 2.15.56 2.91.31.8.73 1.48 1.38 2.12.64.65 1.32 1.07 2.12 1.38.76.3 1.64.5 2.91.56C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c1.27-.06 2.15-.26 2.91-.56a5.85 5.85 0 0 0 2.12-1.38 5.85 5.85 0 0 0 1.38-2.12c.3-.76.5-1.64.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.27-.26-2.15-.56-2.91a5.85 5.85 0 0 0-1.38-2.12A5.85 5.85 0 0 0 19.86.63c-.76-.3-1.64-.5-2.91-.56C15.67.01 15.26 0 12 0zm0 5.84A6.16 6.16 0 1 0 12 18.16 6.16 6.16 0 0 0 12 5.84zm0 10.16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.41-11.85a1.44 1.44 0 1 0 0 2.88 1.44 1.44 0 0 0 0-2.88z"
+                      />
+                    </svg>
+                  </a>
+                )}
+              </div>
+              <div class="review-card__role">{r.role}</div>
             </div>
           </div>
           <p class="review-card__text">“{r.text}”</p>
@@ -591,17 +672,17 @@ const benefits: Benefit[] = [
       </p>
     </div>
 
-    <div class="pricing-card pricing-card--featured pricing-card--single" data-pricing-card data-tier="0">
+    <div class="pricing-card pricing-card--featured pricing-card--single" data-pricing-card data-tier="1">
       <div class="tier-selector" role="radiogroup" aria-label="Choose your plan">
         <div class="tier-selector__label">Choose your plan</div>
         <div class="tier-selector__buttons">
           {tiers.map((t, i) => (
             <button
               type="button"
-              class={`tier-btn${i === 0 ? " is-active" : ""}`}
+              class={`tier-btn${i === 1 ? " is-active" : ""}`}
               data-tier-btn={i}
               role="radio"
-              aria-checked={i === 0 ? "true" : "false"}
+              aria-checked={i === 1 ? "true" : "false"}
             >
               <span class="tier-btn__name">{t.name}</span>
               <span class="tier-btn__desc">{t.description}</span>
@@ -617,17 +698,17 @@ const benefits: Benefit[] = [
           <span role="columnheader">Agency</span>
         </div>
         {benefits.map((b) => {
-          const first = b.incl[0];
-          const hasBadge = first !== "yes" && first !== "no";
+          const initial = b.incl[1];
+          const hasBadge = initial !== "yes" && initial !== "no";
           return (
             <div
-              class={`benefits-table__row${first === "no" ? " is-excluded" : ""}`}
+              class={`benefits-table__row${initial === "no" ? " is-excluded" : ""}`}
               data-incl={JSON.stringify(b.incl)}
               role="row"
             >
               <span class="benefits-table__name">
                 <span class="benefits-table__name-text">{b.name}</span>
-                <span class="benefits-table__badge" data-badge>{hasBadge ? first : ""}</span>
+                <span class="benefits-table__badge" data-badge>{hasBadge ? initial : ""}</span>
               </span>
               <span class="benefits-table__cost" data-col="diy">{b.diy}</span>
               <span class="benefits-table__cost benefits-table__cost--agency" data-col="agency">{b.agency}</span>
@@ -637,19 +718,25 @@ const benefits: Benefit[] = [
       </div>
 
       <div class="pricing-totals">
-        <div class="pricing-total pricing-total--totals-name">
-          <span class="pricing-total__label">Total</span>
+        <!-- Row 1: totals for competitor options, introduced on the left -->
+        <div class="pricing-total pricing-total--totals-label">
+          <span class="pricing-total__label">Total:</span>
         </div>
         <div class="pricing-total pricing-total--totals-diy">
-          <div class="pricing-total__value pricing-total__value--time" data-total-diy>{tiers[0].diySummary}</div>
+          <div class="pricing-total__value pricing-total__value--time" data-total-diy>{tiers[1].diySummary}</div>
         </div>
-        <div class="pricing-total pricing-total--agency-ours">
-          <div class="pricing-total__value pricing-total__value--strike" data-total-agency>{tiers[0].agencySummary}</div>
-          <div class="pricing-total__ours">
-            <span class="pricing-total__ours-price" data-total-price>{tiers[0].price}</span>
-            <span class="pricing-total__ours-sub" data-total-duration>{tiers[0].duration}</span>
-            <span class="pricing-total__guarantee" data-total-guarantee>{tiers[0].moneyBack ? `${tiers[0].moneyBack} money-back guarantee` : ""}</span>
-          </div>
+        <div class="pricing-total pricing-total--totals-agency">
+          <div class="pricing-total__value pricing-total__value--strike" data-total-agency>{tiers[1].agencySummary}</div>
+        </div>
+        <!-- Row 2: g10s offer, introduced on the left -->
+        <div class="pricing-total--ours-bg" aria-hidden="true"></div>
+        <div class="pricing-total pricing-total--ours-label">
+          <span class="pricing-total__label">with g10s:</span>
+        </div>
+        <div class="pricing-total pricing-total--ours-value">
+          <span class="pricing-total__ours-price" data-total-price>{tiers[1].price}</span>
+          <span class="pricing-total__ours-sub" data-total-duration>{tiers[1].duration}</span>
+          <span class="pricing-total__guarantee" data-total-guarantee>{tiers[1].moneyBack ? `${tiers[1].moneyBack} money-back guarantee` : ""}</span>
         </div>
       </div>
     </div>
@@ -704,7 +791,7 @@ const benefits: Benefit[] = [
         });
       });
 
-      render(0);
+      render(1);
     })();
   </script>
 
@@ -715,7 +802,7 @@ const benefits: Benefit[] = [
     <h2>If you've been imagining something you can't build alone — let's talk.</h2>
     <p>
       No pitch deck needed. Just tell me what you're dreaming of and we'll figure
-      out if I can help make it real.
+      out how I can help make it real.
     </p>
     <CtaButton href="mailto:lab@g10s.xyz" />
   </section>

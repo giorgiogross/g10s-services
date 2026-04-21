@@ -45,7 +45,14 @@ export function SourcesPanel() {
             </a>
           </li>
           <li>
-            <span className="td-sources-label">Artist:</span> Hella
+            <span className="td-sources-label">Artist:</span>{" "}
+            <a
+              href="https://www.instagram.com/hellauk?igsh=ZHR3eG9lYmNkandn"
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              Hella
+            </a>
           </li>
           <li>
             Artwork inspired by{" "}
