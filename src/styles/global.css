@@ -1881,6 +1881,105 @@
     color: var(--muted);
     letter-spacing: 0.03em;
   }
+  .foot-links {
+    display: flex;
+    gap: 1.25rem;
+  }
+  .foot-links a {
+    font-family: var(--ff-body);
+    font-size: 0.75rem;
+    color: var(--muted);
+    letter-spacing: 0.03em;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  .foot-links a:hover {
+    color: var(--ink);
+  }
+
+  /* ------- Legal pages ------- */
+  .legal-page {
+    max-width: var(--container-narrow);
+    margin: 0 auto;
+    padding: 6rem var(--gutter) 4rem;
+  }
+  .legal-back {
+    display: inline-block;
+    font-family: var(--ff-body);
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 2rem;
+    transition: color 0.2s ease;
+  }
+  .legal-back:hover {
+    color: var(--ink);
+  }
+  .legal-page h1 {
+    font-family: var(--ff-display);
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 600;
+    color: var(--ink-strong);
+    margin-bottom: 2.5rem;
+    line-height: 1.2;
+  }
+  .legal-page h2 {
+    font-family: var(--ff-display);
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-top: 2.5rem;
+    margin-bottom: 0.75rem;
+  }
+  .legal-page h3 {
+    font-family: var(--ff-body);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--ink-2);
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .legal-page p {
+    font-family: var(--ff-body);
+    font-size: 0.9rem;
+    line-height: 1.75;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+  }
+  .legal-page ul {
+    list-style: disc;
+    padding-left: 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+  .legal-page li {
+    font-family: var(--ff-body);
+    font-size: 0.9rem;
+    line-height: 1.75;
+    color: var(--muted);
+    margin-bottom: 0.25rem;
+  }
+  .legal-page a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .legal-page a:hover {
+    color: var(--accent-deep);
+  }
+  .legal-page .legal-back {
+    text-decoration: none;
+  }
+  .legal-effective {
+    font-style: italic;
+    color: var(--muted-light) !important;
+    margin-bottom: 2rem !important;
+  }
+  .legal-page section {
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 1.5rem;
+  }
+  .legal-page section:last-child {
+    border-bottom: none;
+  }
 
   /* ============================================================
      RESPONSIVE
@@ -1959,6 +2058,9 @@
     .foot {
       flex-direction: column;
       gap: 0.5rem;
+    }
+    .foot-links {
+      gap: 1rem;
     }
   }
 }
