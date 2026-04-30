@@ -522,6 +522,15 @@
     font-size: 1.5rem;
     letter-spacing: -0.01em;
   }
+  .case-card__thumb--cirali {
+    opacity: 0.8;
+  }
+  .case-card__title--cirali {
+    font-family: "Titan One", cursive;
+    font-weight: 400;
+    font-size: 1.55rem;
+    letter-spacing: 0.01em;
+  }
   .case-card__title-bb-initial {
     font-family: "Imperial Script", "Lora", cursive;
     font-weight: 400;
