@@ -171,9 +171,14 @@ const {
         });
       });
 
-      const hash = location.hash.replace("#", "");
-      const initial: TabId = isValidTab(hash) ? hash : "artists";
-      requestAnimationFrame(() => setTab(initial, true));
+      // Only bootstrap the audience toggle on pages that actually render it
+      // (e.g. /app-services). The main landing page has no toggle, so we skip
+      // it here to avoid writing a stray `#artists` hash into its URL.
+      if (toggleBtns.length > 0) {
+        const hash = location.hash.replace("#", "");
+        const initial: TabId = isValidTab(hash) ? hash : "artists";
+        requestAnimationFrame(() => setTab(initial, true));
+      }
 
       let pillResizeTimer: number | null = null;
       window.addEventListener("resize", () => {

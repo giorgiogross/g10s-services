@@ -298,6 +298,77 @@
     }
   }
 
+  /* ------- "Let's talk" bar — persistent bottom-center CTA -------
+     Replaces the audience toggle on the main landing page. Black label on
+     the left, a dark glass pill with a phone icon on the right. On hover the
+     phone icon swaps closed -> open, mirroring the CtaButton behaviour. */
+  .talk-bar {
+    position: fixed;
+    left: 50%;
+    bottom: calc(24px + env(safe-area-inset-bottom));
+    transform: translateX(-50%);
+    z-index: 50;
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 6px 6px 6px 22px;
+    border-radius: var(--radius-pill);
+    text-decoration: none;
+    transition:
+      box-shadow 0.3s var(--ease-out),
+      transform 0.3s var(--ease-out);
+  }
+  .talk-bar:hover {
+    transform: translateX(-50%) translateY(-2px);
+  }
+  .talk-bar:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+  .talk-bar__label {
+    font-family: var(--ff-body);
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: var(--ink-strong);
+    white-space: nowrap;
+  }
+  .talk-bar__pill {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 60px;
+    height: 40px;
+    border-radius: var(--radius-pill);
+    background: rgba(0, 0, 0, 0.82);
+    box-shadow:
+      inset 0 0 0 1px rgba(0, 0, 0, 0.35),
+      inset 1px 1px 0 -1px rgba(255, 255, 255, 0.38),
+      inset 0 -6px 10px -8px rgba(0, 0, 0, 0.6);
+  }
+  .talk-bar__icon {
+    grid-area: 1 / 1;
+    width: 22px;
+    height: 22px;
+    transition: opacity 0.2s var(--ease-out);
+  }
+  .talk-bar__icon--open {
+    opacity: 0;
+  }
+  .talk-bar:hover .talk-bar__icon--closed,
+  .talk-bar:focus-visible .talk-bar__icon--closed {
+    opacity: 0;
+  }
+  .talk-bar:hover .talk-bar__icon--open,
+  .talk-bar:focus-visible .talk-bar__icon--open {
+    opacity: 1;
+  }
+
+  /* Reserve room so the fixed bar never overlaps the footer. */
+  body:has(.talk-bar) {
+    padding-bottom: calc(96px + env(safe-area-inset-bottom));
+  }
+
   /* ------- Sections shared ------- */
   .section {
     padding: 6rem var(--gutter);
@@ -786,6 +857,12 @@
     background-position: center;
     background-repeat: no-repeat;
   }
+  /* Right column holds two labeled groups: case studies, then more projects. */
+  .about-projects {
+    display: flex;
+    flex-direction: column;
+    gap: 2.75rem;
+  }
   .projects-label {
     font-family: var(--ff-body);
     font-size: 0.72rem;
@@ -795,6 +872,69 @@
     text-transform: uppercase;
     color: var(--muted);
     margin-bottom: 1.25rem;
+  }
+  /* Recent-projects cards in a 2-column grid. Titles never wrap: each card
+     body is a container and the brand titles are sized in cqi so they scale
+     down to fit the column instead of wrapping or clipping. */
+  .case-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .case-grid .case-card {
+    width: 100%;
+    min-width: 0;
+  }
+  .case-grid .case-card__body {
+    container-type: inline-size;
+    min-width: 0;
+    padding: 0 16px;
+    overflow: hidden;
+  }
+  .case-grid .case-card__title {
+    white-space: nowrap;
+  }
+  .case-grid .case-card__title--pixel {
+    font-size: min(2rem, 17cqi);
+  }
+  .case-grid .case-card__title--bb {
+    font-size: min(1.5rem, 15cqi);
+  }
+  .case-grid .case-card__title-bb-initial {
+    font-size: min(2.6rem, 26cqi);
+  }
+  .case-grid .case-card__title--mosaiic {
+    font-size: min(1.55rem, 22cqi);
+  }
+  .case-grid .case-card__title--cirali {
+    font-size: min(1.55rem, 18cqi);
+  }
+  .about-socials {
+    display: flex;
+    gap: 14px;
+    margin-top: 1.1rem;
+  }
+  .about-social {
+    color: var(--muted);
+    line-height: 0;
+    transition: color 0.2s var(--ease-out);
+  }
+  .about-social:hover,
+  .about-social:focus-visible {
+    color: var(--ink);
+  }
+  .about-social:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  /* Desktop: the bio stays put while the projects column scrolls past it. */
+  @media (min-width: 901px) {
+    .about-content {
+      position: sticky;
+      top: 6rem;
+      align-self: start;
+    }
   }
   .project-stack {
     display: flex;
