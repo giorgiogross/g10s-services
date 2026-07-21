@@ -149,6 +149,18 @@ const RenaissanceGrid = forwardRef<HTMLDivElement>(function RenaissanceGrid(
 
   // rAF loop: lerps display mouse toward true mouse, then lerps arc spreads
   useEffect(() => {
+    // On touch / coarse-pointer devices there is no cursor to follow, so the
+    // glow would just run the sinusoidal fallback forever — re-rendering the
+    // whole SVG via setState every frame. That pins the mobile main thread and
+    // delays painting of freshly-scrolled content. Render a static grid there.
+    if (
+      typeof window !== "undefined" &&
+      typeof window.matchMedia === "function" &&
+      !window.matchMedia("(hover: hover) and (pointer: fine)").matches
+    ) {
+      return
+    }
+
     let rafId: number
 
     const tick = () => {
