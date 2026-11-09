@@ -1,0 +1,22 @@
+---
+import TextScreen from "../components/placeholder/TextScreen.astro";
+import { confirmStatus, type ConfirmStatus } from "../lib/waitlist/contract";
+
+export const prerender = false;
+
+const COPY: Record<ConfirmStatus, { title: string; text: string }> = {
+  confirmed: { title: "You are on the list", text: "Your email address is confirmed. We will write when we are ready." },
+  expired: { title: "This link has expired", text: "Confirmation links are valid for 48 hours. Join the waitlist again to get a new one." },
+  invalid: { title: "This link is not valid", text: "Please use the latest link we emailed you, or join the waitlist again." },
+  error: { title: "Something went wrong", text: "We could not confirm your address just now. Please open the link again in a moment." },
+};
+
+const parsed = confirmStatus.safeParse(Astro.url.searchParams.get("status"));
+const status: ConfirmStatus = parsed.success ? parsed.data : "invalid";
+const { title, text } = COPY[status];
+---
+
+<TextScreen title={title} pageTitle="Waitlist · g10s" noindex>
+  <p class="ph-screen__center">{text}</p>
+  {status !== "confirmed" && <p class="ph-screen__center"><a href="/">Join the waitlist</a></p>}
+</TextScreen>
