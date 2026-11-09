@@ -1,0 +1,32 @@
+---
+import "../styles/placeholder.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+  noindex?: boolean;
+}
+
+const {
+  title = "g10s",
+  description = "We are still waking up. Join the waitlist when we are ready.",
+  noindex = false,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#000000" />
+    {noindex && <meta name="robots" content="noindex" />}
+    <title>{title}</title>
+    <link rel="icon" type="image/svg+xml" href="/g10s_logo_pixels_bold.svg" />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

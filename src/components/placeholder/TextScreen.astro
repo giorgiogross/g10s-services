@@ -1,0 +1,23 @@
+---
+import Placeholder from "../../layouts/Placeholder.astro";
+
+interface Props {
+  title: string;
+  pageTitle: string;
+  description?: string;
+  noindex?: boolean;
+}
+
+const { title, pageTitle, description, noindex } = Astro.props;
+---
+
+<!-- A plain black screen with the text in the centre; used by the legal pages and the confirmation page. -->
+<Placeholder title={pageTitle} description={description} noindex={noindex}>
+  <main class="ph-screen">
+    <article class="ph-screen__body">
+      <h1>{title}</h1>
+      <slot />
+      <p class="ph-screen__back"><a href="/">Back</a></p>
+    </article>
+  </main>
+</Placeholder>
