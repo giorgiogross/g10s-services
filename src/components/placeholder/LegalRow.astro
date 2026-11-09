@@ -1,0 +1,11 @@
+---
+const links = [
+  { href: "/privacy", label: "Privacy policy" },
+  { href: "/legal", label: "Legal info" },
+  { href: "/terms", label: "Terms" },
+];
+---
+
+<nav aria-label="Legal" class="ph-legal-row">
+  {links.map(({ href, label }) => <a href={href}>{label}</a>)}
+</nav>

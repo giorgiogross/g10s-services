@@ -1,0 +1,15 @@
+---
+import Placeholder from "../layouts/Placeholder.astro";
+import BouncingLogo from "../components/placeholder/BouncingLogo";
+import Waitlist from "../components/placeholder/Waitlist";
+import LegalRow from "../components/placeholder/LegalRow.astro";
+---
+
+<Placeholder>
+  <main class="ph-stage">
+    <h1 class="sr-only">g10s: we are still waking up</h1>
+    <BouncingLogo client:only="react" />
+    <Waitlist client:load />
+    <LegalRow />
+  </main>
+</Placeholder>
